@@ -41,3 +41,7 @@ The program source files SOSGameGUI.java and the UnitTest.java are located in:
 - SOSJavaFX/src/sprint0/product
 - SOSJavaFX/src/sprint0/test
 
+
+Screenshot:
+
+[screenshot_sprint0][https://github.com/jsb58p/CS449---Software-Engineering-Project/blob/main/screenshot_sprint0.png]
