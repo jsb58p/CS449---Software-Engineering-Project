@@ -4,12 +4,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-
-
 import org.junit.jupiter.api.Test;
 
 /**
- * Unit Tests
+ * Unit Tests for assertions.
  */
 class UnitTest {
 
@@ -35,3 +33,4 @@ class UnitTest {
 
 
 }
+
