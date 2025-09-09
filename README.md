@@ -4,7 +4,7 @@ Java Version: Java JDK-24
 
 GUI: JavaFX 24.0.2
 
-IDE: Eclipse
+IDE: Eclipse Version: 2025-06 (4.36.0)
 
 xUnit framework: JUnit 5.12.2
 
