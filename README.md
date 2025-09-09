@@ -6,7 +6,7 @@ GUI: JavaFX 24.0.2
 
 IDE: Eclipse
 
-xUnit framework: JUnit
+xUnit framework: JUnit 5.12.2
 
 Programming Style: Google Style
 
