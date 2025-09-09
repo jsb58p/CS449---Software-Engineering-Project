@@ -46,7 +46,7 @@ The program source files SOSGameGUI.java and the UnitTest.java are located in:
 
 ## Unit Test:
 
-![screenshot_sprint0](https://github.com/jsb58p/CS449---Software-Engineering-Project/blob/main/screenshot_sprint0test.png)
+![screenshot_sprint0](https://github.com/jsb58p/CS449---Software-Engineering-Project/blob/main/screenshots/screenshot_sprint0test.png)
 
 ## GUI:
 
