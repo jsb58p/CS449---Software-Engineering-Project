@@ -29,18 +29,21 @@ public class SOSGameGUI extends Application {
         
     	// Setting up main window.
         BorderPane root = new BorderPane();
-        
         root.setPadding(new Insets(10));
         
         // Top section.
-        VBox topSection = new VBox(10);
+        HBox topSection = new HBox(30);
         topSection.setAlignment(Pos.CENTER);
         
         Label titleLabel = new Label("SOS");
         titleLabel.setTextFill(Color.BLUE);
         titleLabel.setStyle("-fx-font-size: 20px;");
         
-        topSection.getChildren().addAll(titleLabel);
+        RadioButtonGroup gameMode = new RadioButtonGroup("Simple game", "General game", false);
+        gameMode.selectFirst();
+        gameMode.setPadding(new Insets(30));
+        
+        topSection.getChildren().addAll(titleLabel, gameMode);
         root.setTop(topSection);
         
         // Center section.
@@ -89,7 +92,6 @@ public class SOSGameGUI extends Application {
         bottomSection.setPadding(new Insets(10));
         
         Label instructionLabel = new Label("Current Turn:");
-
         CheckBox checkbox1 = new CheckBox("Record Game");
         
         bottomSection.getChildren().addAll(instructionLabel, checkbox1);
