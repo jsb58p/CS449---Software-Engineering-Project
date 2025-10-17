@@ -1,9 +1,14 @@
 package sprint2.product;
 
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
-import javafx.scene.layout.Pane;
+import javafx.scene.control.Label;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
@@ -22,65 +27,75 @@ public class SOSGameGUI extends Application {
     @Override
     public void start(Stage primaryStage) {
         
-        // Using Pane for absolute positioning.
-        Pane root = new Pane();
+    	// Setting up main window.
+        BorderPane root = new BorderPane();
         
-        // Creating and positioning text.
-        Text titleText = new Text();
-        titleText.setText("SOS");
-        titleText.setX(50);  // X position from left.
-        titleText.setY(30);  // Y position from top.
-        titleText.setFill(Color.BLUE);
+        root.setPadding(new Insets(10));
         
-        Text instructionText = new Text();
-        instructionText.setText("Current Turn: ");
-        instructionText.setX(50);
-        instructionText.setY(60);
+        // Top section.
+        VBox topSection = new VBox(10);
+        topSection.setAlignment(Pos.CENTER);
         
-        // Creating and positioning lines.
-        Line horizontalLine = new Line();
-        horizontalLine.setStartX(20);
-        horizontalLine.setStartY(80); 
-        horizontalLine.setEndX(300); 
-        horizontalLine.setEndY(80); 
+        Label titleLabel = new Label("SOS");
+        titleLabel.setTextFill(Color.BLUE);
+        titleLabel.setStyle("-fx-font-size: 20px;");
+        
+        Label instructionLabel = new Label("Current Turn:");
+        
+        topSection.getChildren().addAll(titleLabel, instructionLabel);
+        root.setTop(topSection);
+        
+        // Center section.
+        VBox centerSection = new VBox(20);
+        centerSection.setAlignment(Pos.CENTER);
+        
+
+        Line horizontalLine = new Line(0, 0, 200, 100); // Relative coordinates
         horizontalLine.setStroke(Color.BLACK);
         
-        Line verticalLine = new Line();
-        verticalLine.setStartX(200); 
-        verticalLine.setStartY(100); 
-        verticalLine.setEndX(300);     
-        verticalLine.setEndY(200);     
+        Line verticalLine = new Line(0, 0, 100, 100);
         verticalLine.setStroke(Color.RED);
+
+        centerSection.getChildren().addAll(horizontalLine, verticalLine);
+        root.setCenter(centerSection);
+
+        // Left Section.
+        VBox leftSection = new VBox(15);
+        leftSection.setAlignment(Pos.TOP_CENTER);
         
-        // Creating and positioning checkboxes.
-        CheckBox checkbox1 = new CheckBox("Record Game");
-        checkbox1.setLayoutX(50);   // X position
-        checkbox1.setLayoutY(400);  // Y position
+        Label blueLabel = new Label("Blue Player");
+        blueLabel.setStyle("-fx-font-weight: bold;");
         
-        // Creating and positioning radio buttons.       
         RadioButtonGroup bluePlayerRadio = new RadioButtonGroup("S", "O");
         bluePlayerRadio.selectFirst();
-        bluePlayerRadio.setLayoutX(480);
-        bluePlayerRadio.setLayoutY(250);
-
+                
+        leftSection.getChildren().addAll(blueLabel, bluePlayerRadio);
+        root.setLeft(leftSection);
+        
+        //Right section.
+        VBox rightSection = new VBox(15);
+        rightSection.setAlignment(Pos.TOP_CENTER);
+        
+        Label redLabel = new Label("Red Player");
+        redLabel.setStyle("-fx-font-weight: bold;");
+        
         RadioButtonGroup redPlayerRadio = new RadioButtonGroup("S", "O");
         redPlayerRadio.selectFirst();
-        redPlayerRadio.setLayoutX(120);
-        redPlayerRadio.setLayoutY(250);
-
-        // Add all elements to the root container.
-        root.getChildren().addAll(
-            titleText, 
-            instructionText,
-            horizontalLine,
-            verticalLine, 
-            checkbox1, 
-            bluePlayerRadio,
-            redPlayerRadio
-        );
         
+        rightSection.getChildren().addAll(redLabel, redPlayerRadio);
+        root.setRight(rightSection);
+        
+        // Bottom section.
+        HBox bottomSection = new HBox();
+        bottomSection.setAlignment(Pos.CENTER);
+        bottomSection.setPadding(new Insets(10));
+        
+        CheckBox checkbox1 = new CheckBox("Record Game");
+        bottomSection.getChildren().add(checkbox1);
+        root.setBottom(bottomSection);
+
         // Create scene and show window.
-        Scene scene = new Scene(root, 400, 300);
+        Scene scene = new Scene(root, 400, 400);
         primaryStage.setTitle("SOS Game");
         primaryStage.setScene(scene);
         primaryStage.show();
