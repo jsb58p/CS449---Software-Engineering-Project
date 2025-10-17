@@ -40,9 +40,7 @@ public class SOSGameGUI extends Application {
         titleLabel.setTextFill(Color.BLUE);
         titleLabel.setStyle("-fx-font-size: 20px;");
         
-        Label instructionLabel = new Label("Current Turn:");
-        
-        topSection.getChildren().addAll(titleLabel, instructionLabel);
+        topSection.getChildren().addAll(titleLabel);
         root.setTop(topSection);
         
         // Center section.
@@ -86,12 +84,15 @@ public class SOSGameGUI extends Application {
         root.setRight(rightSection);
         
         // Bottom section.
-        HBox bottomSection = new HBox();
+        VBox bottomSection = new VBox(20);
         bottomSection.setAlignment(Pos.CENTER);
         bottomSection.setPadding(new Insets(10));
         
+        Label instructionLabel = new Label("Current Turn:");
+
         CheckBox checkbox1 = new CheckBox("Record Game");
-        bottomSection.getChildren().add(checkbox1);
+        
+        bottomSection.getChildren().addAll(instructionLabel, checkbox1);
         root.setBottom(bottomSection);
 
         // Create scene and show window.
