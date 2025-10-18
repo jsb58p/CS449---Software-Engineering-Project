@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -22,6 +23,7 @@ import javafx.stage.Stage;
 public class SOSGameGUI extends Application {
 	    
 	private SOSGame game;
+	private GridPane boardGrid;
 	
 	/**
 	 * Starts the JavaFX application and sets up the main window.
@@ -59,6 +61,7 @@ public class SOSGameGUI extends Application {
         			? SOSGame.GameMode.SIMPLE
         			: SOSGame.GameMode.GENERAL;
         	game = new SOSGame(size, mode);
+        	updateBoardDisplay();
         	System.out.println("New game started: " + size + "x" + size + ", " + mode);
         });
         
@@ -69,6 +72,11 @@ public class SOSGameGUI extends Application {
         VBox centerSection = new VBox(20);
         centerSection.setAlignment(Pos.CENTER);
         
+        boardGrid = new GridPane();
+        boardGrid.setAlignment(Pos.CENTER);
+        boardGrid.setHgap(5);
+        boardGrid.setVgap(5);
+        centerSection.getChildren().add(boardGrid);
 
         Line horizontalLine = new Line(0, 0, 200, 100); // Relative coordinates
         horizontalLine.setStroke(Color.BLACK);
@@ -121,6 +129,28 @@ public class SOSGameGUI extends Application {
         primaryStage.setTitle("SOS Game");
         primaryStage.setScene(scene);                             
         primaryStage.show();
+    }
+    
+    /**
+     * Updates the board display to match the current game state.
+     * Clears the existing grid and creates new cells based on board size.
+     */
+    private void updateBoardDisplay() {
+    	boardGrid.getChildren().clear();
+    	int size = game.getBoardSize();
+    	char[][] board = game.getBoard();
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                // Create a label for this cell
+                Label cell = new Label(String.valueOf(board[row][col]));
+                cell.setMinSize(40, 40); // Set cell size
+                cell.setMaxSize(40, 40);
+                cell.setAlignment(Pos.CENTER);
+                cell.setStyle("-fx-border-color: black; -fx-border-width: 1;"); // Cell border
+                // Add the cell to the grid at (col, row)
+                boardGrid.add(cell, col, row);
+            }
+        }	
     }
     
     /**
