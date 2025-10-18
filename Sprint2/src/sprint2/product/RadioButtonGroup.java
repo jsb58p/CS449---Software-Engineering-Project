@@ -55,9 +55,9 @@ public class RadioButtonGroup extends VBox {
     /**
      * Gets the text of the currently selected radio button.
      * 
-     * @return the text ("S" or "O") of the selected button, or null if nothing is selected
+     * @return the text of the selected button, or null if nothing is selected
      */
-    public String getSelectedLetter() {
+    public String getSelectedButton() {
     	RadioButton selected = (RadioButton) toggleGroup.getSelectedToggle(); //typecast generic Toggle object to RadioButton object
     	return (selected != null) ? selected.getText() : null;
     }

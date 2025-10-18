@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -11,14 +12,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
-import javafx.scene.text.Text;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.stage.Stage;
 
 /**
  * This class represents the GUI for the SOS game.
  */
 public class SOSGameGUI extends Application {
-    
+	    
+	private SOSGame game;
+	
 	/**
 	 * Starts the JavaFX application and sets up the main window.
 	 *
@@ -39,11 +43,26 @@ public class SOSGameGUI extends Application {
         titleLabel.setTextFill(Color.BLUE);
         titleLabel.setStyle("-fx-font-size: 20px;");
         
+        Spinner<Integer> boardSizeSpinner = new Spinner<>();
+        boardSizeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(3, 10, 3));
+        boardSizeSpinner.setMaxWidth(60);
+        
         RadioButtonGroup gameMode = new RadioButtonGroup("Simple game", "General game", false);
         gameMode.selectFirst();
         gameMode.setPadding(new Insets(30));
         
-        topSection.getChildren().addAll(titleLabel, gameMode);
+        Button newGameButton = new Button("New Game");
+        newGameButton.setOnAction(e -> {
+        	int size = boardSizeSpinner.getValue();
+        	String selectedMode = gameMode.getSelectedButton();
+        	SOSGame.GameMode mode = selectedMode.equals("Simple game")
+        			? SOSGame.GameMode.SIMPLE
+        			: SOSGame.GameMode.GENERAL;
+        	game = new SOSGame(size, mode);
+        	System.out.println("New game started: " + size + "x" + size + ", " + mode);
+        });
+        
+        topSection.getChildren().addAll(titleLabel, gameMode, boardSizeSpinner, newGameButton);
         root.setTop(topSection);
         
         // Center section.
@@ -100,7 +119,7 @@ public class SOSGameGUI extends Application {
         // Create scene and show window.
         Scene scene = new Scene(root, 400, 400);
         primaryStage.setTitle("SOS Game");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(scene);                             
         primaryStage.show();
     }
     
