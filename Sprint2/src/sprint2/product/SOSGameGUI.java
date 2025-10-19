@@ -27,7 +27,7 @@ public class SOSGameGUI extends Application {
 	private GridPane boardGrid;
 	private RadioButtonGroup bluePlayerRadio;
 	private RadioButtonGroup redPlayerRadio;
-	
+	private Label instructionLabel;
 	/**
 	 * Starts the JavaFX application and sets up the main window.
 	 *
@@ -65,6 +65,8 @@ public class SOSGameGUI extends Application {
         			: SOSGame.GameMode.GENERAL;
         	game = new SOSGame(size, mode);
         	updateBoardDisplay();
+        	instructionLabel.setText("Current Turn: Blue Player");
+        	instructionLabel.setTextFill(Color.BLUE);
         	System.out.println("New game started: " + size + "x" + size + ", " + mode);
         });
         
@@ -121,7 +123,7 @@ public class SOSGameGUI extends Application {
         bottomSection.setAlignment(Pos.CENTER);
         bottomSection.setPadding(new Insets(10));
         
-        Label instructionLabel = new Label("Current Turn:");
+        instructionLabel = new Label("Current Turn:");
         CheckBox checkbox1 = new CheckBox("Record Game");
         
         bottomSection.getChildren().addAll(instructionLabel, checkbox1);
@@ -163,6 +165,14 @@ public class SOSGameGUI extends Application {
                 		game.makeMove(r,  c,  selectedLetter.charAt(0));
                 		cell.setText(selectedLetter);
                 		game.switchPlayer();
+                		Player nextPlayer = game.getCurrentPlayer();
+                		if (nextPlayer == Player.BLUE) {
+                			instructionLabel.setText("Current Turn: Blue Player");
+                			instructionLabel.setTextFill(Color.BLUE);
+                		} else {
+                			instructionLabel.setText("Current Turn: Red Player");
+                			instructionLabel.setTextFill(Color.RED);
+                		}
                 	}
                 });
                 boardGrid.add(cell, col, row);
