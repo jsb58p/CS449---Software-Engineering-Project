@@ -14,6 +14,15 @@ public class SOSGame {
 		GENERAL
 	}
 	
+	/**
+	 * Represents the player colors
+	 */
+	public enum Player {
+		BLUE,
+		RED
+	}
+	
+	private Player currentPlayer;
 	private int boardSize;
 	private GameMode gameMode;
 	private char[][] board;
@@ -29,6 +38,7 @@ public class SOSGame {
 		this.boardSize = boardSize;
 		this.gameMode = gameMode;
 		this.board = new char[boardSize][boardSize];
+		this.currentPlayer = Player.BLUE;
 		for (int i = 0; i < boardSize; i++) {
 			for (int j = 0; j < boardSize; j++) {
 				board[i][j] = ' ';
@@ -59,7 +69,7 @@ public class SOSGame {
 	/**
 	 * Gets the current board state.
 	 * 
-	 * @return the 2D char array representing the board
+	 * @return the 2D char array representing the board.
 	 */
 	public char[][] getBoard(){
 		return board;
@@ -72,5 +82,43 @@ public class SOSGame {
 	 */
 	public int getBoardSize() {
 		return boardSize;
+	}
+	
+	/**
+	 * Checks if a cell is empty.
+	 * 
+	 * @param row the row index
+	 * @param col the column index
+	 * @return true if the cell is empty, false otherwise
+	 */
+	public boolean isCellEmpty(int row, int col) {
+		return board[row][col] == ' ';
+	}
+	
+	/**
+	 * Gets the current player.
+	 * 
+	 * @return the current player
+	 */
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+	
+	/**
+	 * Switches to the other player
+	 */
+	public void switchPlayer() {
+		currentPlayer = (currentPlayer == Player.BLUE) ? Player.RED : Player.BLUE;
+	}
+	
+	/**
+	 * Places a letter at the specified position.
+	 * 
+	 * @param row the row index
+	 * @param col the column index
+	 * @param letter the letter to place ('S' or 'O')
+	 */
+	public void makeMove(int row, int col, char letter) {
+		board[row][col] = letter;
 	}
 }

@@ -16,6 +16,7 @@ import javafx.scene.shape.Line;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.stage.Stage;
+import sprint2.product.SOSGame.Player;
 
 /**
  * This class represents the GUI for the SOS game.
@@ -24,6 +25,8 @@ public class SOSGameGUI extends Application {
 	    
 	private SOSGame game;
 	private GridPane boardGrid;
+	private RadioButtonGroup bluePlayerRadio;
+	private RadioButtonGroup redPlayerRadio;
 	
 	/**
 	 * Starts the JavaFX application and sets up the main window.
@@ -71,12 +74,12 @@ public class SOSGameGUI extends Application {
         // Center section.
         VBox centerSection = new VBox(20);
         centerSection.setAlignment(Pos.CENTER);
+        centerSection.setPadding(new Insets(30));
         
         boardGrid = new GridPane();
         boardGrid.setAlignment(Pos.CENTER);
         boardGrid.setHgap(5);
-        boardGrid.setVgap(5);
-        centerSection.getChildren().add(boardGrid);
+        boardGrid.setVgap(5);   
 
         Line horizontalLine = new Line(0, 0, 200, 100); // Relative coordinates
         horizontalLine.setStroke(Color.BLACK);
@@ -84,7 +87,7 @@ public class SOSGameGUI extends Application {
         Line verticalLine = new Line(0, 0, 100, 100);
         verticalLine.setStroke(Color.RED);
 
-        centerSection.getChildren().addAll(horizontalLine, verticalLine);
+        centerSection.getChildren().addAll(boardGrid, horizontalLine, verticalLine);
         root.setCenter(centerSection);
 
         // Left Section.
@@ -94,7 +97,7 @@ public class SOSGameGUI extends Application {
         Label blueLabel = new Label("Blue Player");
         blueLabel.setStyle("-fx-font-weight: bold;");
         
-        RadioButtonGroup bluePlayerRadio = new RadioButtonGroup("S", "O");
+        bluePlayerRadio = new RadioButtonGroup("S", "O");
         bluePlayerRadio.selectFirst();
                 
         leftSection.getChildren().addAll(blueLabel, bluePlayerRadio);
@@ -107,7 +110,7 @@ public class SOSGameGUI extends Application {
         Label redLabel = new Label("Red Player");
         redLabel.setStyle("-fx-font-weight: bold;");
         
-        RadioButtonGroup redPlayerRadio = new RadioButtonGroup("S", "O");
+        redPlayerRadio = new RadioButtonGroup("S", "O");
         redPlayerRadio.selectFirst();
         
         rightSection.getChildren().addAll(redLabel, redPlayerRadio);
@@ -141,13 +144,27 @@ public class SOSGameGUI extends Application {
     	char[][] board = game.getBoard();
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                // Create a label for this cell
-                Label cell = new Label(String.valueOf(board[row][col]));
-                cell.setMinSize(40, 40); // Set cell size
+                final int r = row;
+                final int c = col;
+                Button cell = new Button(String.valueOf(board[row][col]));
+                cell.setMinSize(40, 40);
                 cell.setMaxSize(40, 40);
                 cell.setAlignment(Pos.CENTER);
-                cell.setStyle("-fx-border-color: black; -fx-border-width: 1;"); // Cell border
-                // Add the cell to the grid at (col, row)
+                cell.setStyle("-fx-border-color: black; -fx-border-width: 1;");
+                cell.setOnAction(e -> {
+                	if (game.isCellEmpty(r, c)) {
+                		Player currentPlayer = game.getCurrentPlayer();
+                		String selectedLetter;
+                		if (currentPlayer == Player.BLUE) {
+                			selectedLetter = bluePlayerRadio.getSelectedButton();
+                		} else {
+                			selectedLetter = redPlayerRadio.getSelectedButton();
+                		}
+                		game.makeMove(r,  c,  selectedLetter.charAt(0));
+                		cell.setText(selectedLetter);
+                		game.switchPlayer();
+                	}
+                });
                 boardGrid.add(cell, col, row);
             }
         }	
