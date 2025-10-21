@@ -67,6 +67,15 @@ public class SOSGame {
 	}
 	
 	/**
+	 * Gets the current game mode.
+	 * 
+	 * @return the game mode
+	 */
+	public GameMode getGameMode() {
+		return gameMode;
+	}
+	
+	/**
 	 * Gets the current board state.
 	 * 
 	 * @return the 2D char array representing the board.

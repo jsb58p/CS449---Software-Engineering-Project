@@ -78,9 +78,7 @@ public class SOSGameGUI extends Application {
         centerSection.setPadding(new Insets(30));
         
         boardGrid = new GridPane();
-        boardGrid.setAlignment(Pos.CENTER);
-        boardGrid.setHgap(0);
-        boardGrid.setVgap(0);   
+        boardGrid.setAlignment(Pos.CENTER);   
 
         centerSection.getChildren().addAll(boardGrid);
         root.setCenter(centerSection);
@@ -142,8 +140,8 @@ public class SOSGameGUI extends Application {
                 final int r = row;
                 final int c = col;
                 Button cell = new Button(String.valueOf(board[row][col]));
-                cell.setMinSize(40, 40);
-                cell.setMaxSize(40, 40);
+                cell.setMinSize(50, 40);
+                cell.setMaxSize(50, 40);
                 cell.setAlignment(Pos.CENTER);
                 cell.setStyle("-fx-border-color: black; -fx-border-width: 1;");
                 // Wire up cells on game board.
