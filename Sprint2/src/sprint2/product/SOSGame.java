@@ -15,7 +15,7 @@ public class SOSGame {
 	}
 	
 	/**
-	 * Represents the player colors
+	 * Represents the player colors.
 	 */
 	public enum Player {
 		BLUE,
@@ -105,7 +105,7 @@ public class SOSGame {
 	}
 	
 	/**
-	 * Switches to the other player
+	 * Switches to the other player.
 	 */
 	public void switchPlayer() {
 		currentPlayer = (currentPlayer == Player.BLUE) ? Player.RED : Player.BLUE;

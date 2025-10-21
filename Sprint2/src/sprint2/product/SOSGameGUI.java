@@ -12,7 +12,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.stage.Stage;
@@ -80,16 +79,10 @@ public class SOSGameGUI extends Application {
         
         boardGrid = new GridPane();
         boardGrid.setAlignment(Pos.CENTER);
-        boardGrid.setHgap(5);
-        boardGrid.setVgap(5);   
+        boardGrid.setHgap(0);
+        boardGrid.setVgap(0);   
 
-        Line horizontalLine = new Line(0, 0, 200, 100); // Relative coordinates
-        horizontalLine.setStroke(Color.BLACK);
-        
-        Line verticalLine = new Line(0, 0, 100, 100);
-        verticalLine.setStroke(Color.RED);
-
-        centerSection.getChildren().addAll(boardGrid, horizontalLine, verticalLine);
+        centerSection.getChildren().addAll(boardGrid);
         root.setCenter(centerSection);
 
         // Left Section.
@@ -153,17 +146,18 @@ public class SOSGameGUI extends Application {
                 cell.setMaxSize(40, 40);
                 cell.setAlignment(Pos.CENTER);
                 cell.setStyle("-fx-border-color: black; -fx-border-width: 1;");
+                // Wire up cells on game board.
                 cell.setOnAction(e -> {
                 	if (game.isCellEmpty(r, c)) {
-                		Player currentPlayer = game.getCurrentPlayer();
                 		String selectedLetter;
-                		if (currentPlayer == Player.BLUE) {
+                		if (game.getCurrentPlayer() == Player.BLUE) {
                 			selectedLetter = bluePlayerRadio.getSelectedButton();
                 		} else {
                 			selectedLetter = redPlayerRadio.getSelectedButton();
                 		}
                 		game.makeMove(r,  c,  selectedLetter.charAt(0));
                 		cell.setText(selectedLetter);
+                		// Switch players and show turn.
                 		game.switchPlayer();
                 		Player nextPlayer = game.getCurrentPlayer();
                 		if (nextPlayer == Player.BLUE) {
