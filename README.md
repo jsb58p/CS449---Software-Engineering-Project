@@ -17,7 +17,7 @@ Project Hosting Site: github.com
 To add the JavaFX .jar files to the project:
 
 
-Right click the project folder > Properties > select “Java Build Path” in the left-side pane > select “Modulepath” in the main window > Add External Jars > In the window that opens, navigate to “path\to\javafx-sdk-24.0.2\lib”  > select all .jar files > Open > Apply 
+Right click the project folder > Properties > select “Java Build Path” in the left-side pane > select “Modulepath” in the main window > Add External Jars > In the window that opens, navigate to “path\to\javafx-sdk-24.0.2\lib” > select all .jar files > Open > Apply 
 
 --
 
@@ -25,7 +25,7 @@ Right click the project folder > Properties > select “Java Build Path” in th
 To link the JavaFX library with the program using it:
 
 
-Right click the program > Run as > Run Configurations > select the program in the left-side pane > Arguments tab > Under VM arguments enter: --module-path "path\to\javafx-sdk-24.0.2\lib" --add-modules javafx.controls,javafx.fxml   
+Right click the program > Run as > Run Configurations > select the program in the left-side pane > Arguments tab > Under VM arguments enter: --module-path "path\to\javafx-sdk-24.0.2\lib" --add-modules javafx.controls,javafx.fxml > Apply   
 
 --
 
