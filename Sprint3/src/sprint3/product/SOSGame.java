@@ -1,0 +1,198 @@
+package sprint3.product;
+
+/**
+*Represents the SOS game logic.
+*Handles game size, rules, and player turns.
+*/
+public class SOSGame {
+	
+	/**
+	 * Represents the game mode options.
+	 */
+	public enum GameMode {
+		SIMPLE,
+		GENERAL
+	}
+	
+	/**
+	 * Represents the player colors.
+	 */
+	public enum Player {
+		BLUE,
+		RED
+	}
+	
+	private Player currentPlayer;
+	private int boardSize;
+	private GameMode gameMode;
+	private char[][] board;
+	
+	
+	/**
+	 * Creates a new SOS game with the specified settings.
+	 * 
+	 * @param boardSize the size of the board (e.g. 3 for 3x3)
+	 * @param gameMode the game mode (SIMPLE or GENERAL)
+	 */
+	public SOSGame(int boardSize, GameMode gameMode) {
+		this.boardSize = boardSize;
+		this.gameMode = gameMode;
+		this.board = new char[boardSize][boardSize];
+		this.currentPlayer = Player.BLUE;
+		for (int i = 0; i < boardSize; i++) {
+			for (int j = 0; j < boardSize; j++) {
+				board[i][j] = ' ';
+			}
+		}
+	}
+	
+	/**
+	 * Updates the board size.
+	 * Used when user changes the spinner value.
+	 * 
+	 * @param boardSize the new board size (between 3 and 10)
+	 */
+	public void setBoardSize(int boardSize) {
+		this.boardSize  = boardSize;
+	}
+	
+	/**
+	 * Updates the game mode.
+	 * Used when user selects Simple or General game.
+	 * 
+	 * @param gameMode the new game mode
+	 */
+	public void setGameMode(GameMode gameMode) {
+		this.gameMode = gameMode;
+	}
+	
+	/**
+	 * Gets the current game mode.
+	 * 
+	 * @return the game mode
+	 */
+	public GameMode getGameMode() {
+		return gameMode;
+	}
+	
+	/**
+	 * Gets the current board state.
+	 * 
+	 * @return the 2D char array representing the board.
+	 */
+	public char[][] getBoard(){
+		return board;
+	}
+	
+	/**
+	 * Gets the current board size.
+	 * 
+	 * @return the board size
+	 */
+	public int getBoardSize() {
+		return boardSize;
+	}
+	
+	/**
+	 * Checks if a cell is empty.
+	 * 
+	 * @param row the row index
+	 * @param col the column index
+	 * @return true if the cell is empty, false otherwise
+	 */
+	public boolean isCellEmpty(int row, int col) {
+		return board[row][col] == ' ';
+	}
+	
+	/**
+	 * Gets the current player.
+	 * 
+	 * @return the current player
+	 */
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+	
+	/**
+	 * Switches to the other player.
+	 */
+	public void switchPlayer() {
+		currentPlayer = (currentPlayer == Player.BLUE) ? Player.RED : Player.BLUE;
+	}
+	
+	/**
+	 * Places a letter at the specified position.
+	 * 
+	 * @param row the row index
+	 * @param col the column index
+	 * @param letter the letter to place ('S' or 'O')
+	 */
+	public void makeMove(int row, int col, char letter) {
+		board[row][col] = letter;
+		checkScore(row, col, letter); 
+	}
+	
+	/**
+	 * Checks if the most recent move formed any "SOS" patterns and counts them.
+	 * It first checks the horizontal and diagonal for a given letter, then vertical.
+	 * 
+	 * @param row the row index
+	 * @param col the column index
+	 * @param letter the letter placed ('S' or 'O')
+	 * @return the number of "SOS" patterns formed by this move
+	 */
+	public int checkScore(int row, int col, char letter) {
+		int sosCount = 0;
+		for(int i = -1; i <= 1; i++) {
+			// Horizontal and diagonals check for "SOS".
+			switch (letter) {
+			case 'S':
+				if(col + 1 < boardSize && row - i >= 0 && row - i < boardSize && board[row-i][col+1] == 'O') {
+				    if(row - (2*i) >= 0 && row - (2*i) < boardSize && col + 2 < boardSize && board[row - (2*i)][col + 2] == 'S') {
+				        sosCount++;
+				        System.out.println("SOS");
+				    }
+				}
+				if (col - 1 >= 0 && row + i >= 0 && row + i < boardSize && board[row+i][col-1] == 'O') {
+					if(row + (2*i) >= 0 && row + (2*i) < boardSize && col - 2 >= 0 && board[row + (2*i)][col - 2] == 'S') {
+				        sosCount++;
+				        System.out.println("SOS");
+				    }
+				}
+				break;
+			case 'O':
+				if(col + 1 < boardSize && col - 1 >= 0 && row - i >= 0 && row - i < boardSize && row + i >= 0 && row + i < boardSize && board[row-i][col+1] == 'S' && board[row+i][col-1] == 'S') {
+					System.out.println("SOS");
+					sosCount++;
+				} 
+				break;
+			}
+		}
+		// Verticals check for "SOS".
+		switch (letter) {
+		case 'S':
+			if(row + 1 < boardSize && board[row+1][col] == 'O') { 
+				if(row + 2 < boardSize && board[row+2][col] == 'S') { 
+					System.out.println("SOS");
+					sosCount++;
+				}
+			}
+			if(row - 1 >= 0 && board[row-1][col] == 'O') {
+				if(row - 2 >= 0 && board[row-2][col] == 'S') {
+					System.out.println("SOS");
+					sosCount++;
+				}
+			}
+			break;
+		case 'O':
+			if(row - 1 >= 0 && row + 1 < boardSize && board[row+1][col] == 'S' && board[row-1][col] == 'S') {
+				System.out.println("SOS");
+				sosCount++;
+			}
+			break;
+		}
+		 System.out.println(sosCount);
+		return sosCount;
+	}
+	
+}
