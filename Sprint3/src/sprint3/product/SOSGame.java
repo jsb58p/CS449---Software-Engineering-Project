@@ -26,6 +26,7 @@ public class SOSGame {
 	private int boardSize;
 	private GameMode gameMode;
 	private char[][] board;
+	private GameModeLogic gameModeLogic;
 	
 	
 	/**
@@ -39,6 +40,13 @@ public class SOSGame {
 		this.gameMode = gameMode;
 		this.board = new char[boardSize][boardSize];
 		this.currentPlayer = Player.BLUE;
+
+		if (gameMode == GameMode.SIMPLE) {
+			gameModeLogic = new SimpleMode(this);
+		} else {
+			gameModeLogic = new GeneralMode(this);
+		}
+		
 		for (int i = 0; i < boardSize; i++) {
 			for (int j = 0; j < boardSize; j++) {
 				board[i][j] = ' ';
@@ -64,6 +72,11 @@ public class SOSGame {
 	 */
 	public void setGameMode(GameMode gameMode) {
 		this.gameMode = gameMode;
+		if (gameMode == GameMode.SIMPLE) {
+			gameModeLogic = new SimpleMode(this);
+		} else {
+			gameModeLogic = new GeneralMode(this);
+		}
 	}
 	
 	/**
@@ -121,7 +134,7 @@ public class SOSGame {
 	}
 	
 	/**
-	 * Places a letter at the specified position.
+	 * Places a letter at the specified position and applies game logic.
 	 * 
 	 * @param row the row index
 	 * @param col the column index
@@ -129,7 +142,11 @@ public class SOSGame {
 	 */
 	public void makeMove(int row, int col, char letter) {
 		board[row][col] = letter;
-		checkScore(row, col, letter); 
+		gameModeLogic.handleMove(row, col, letter, currentPlayer);
+		
+		if (gameModeLogic.isGameOver()) {
+			gameModeLogic.getWinner();
+		}
 	}
 	
 	/**
