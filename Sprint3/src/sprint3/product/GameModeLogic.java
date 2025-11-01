@@ -34,7 +34,6 @@ public abstract class GameModeLogic{
 	/**
 	 * Updates the score for the specified player.
 	 * 
-	 * @param player the player whose score should be updated
 	 * @param points the number of points to add
 	 */
 	protected void updateScore(SOSGame.Player player, int points) {
@@ -62,7 +61,7 @@ public abstract class GameModeLogic{
 	/**
 	 * Determines if the current player should get another turn.
 	 * 
-	 * @param sosCount the number of SOS patterns formed in the last move
+	 * @param sosFormed the number of SOS patterns formed in the last move
 	 * @return true if the player gets to continue, false otherwise (according to mode rules)
 	 */
 	public abstract boolean shouldPlayerContinue(int sosFormed);

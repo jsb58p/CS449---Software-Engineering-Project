@@ -1,6 +1,7 @@
 package sprint3.product;
 
 import javafx.application.Application;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,6 +13,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.stage.Stage;
@@ -27,6 +29,7 @@ public class SOSGameGUI extends Application {
 	private RadioButtonGroup bluePlayerRadio;
 	private RadioButtonGroup redPlayerRadio;
 	private Label instructionLabel;
+    
 	/**
 	 * Starts the JavaFX application and sets up the main window.
 	 *
@@ -59,10 +62,8 @@ public class SOSGameGUI extends Application {
         newGameButton.setOnAction(e -> {
         	int size = boardSizeSpinner.getValue();
         	String selectedMode = gameMode.getSelectedButton();
-        	SOSGame.GameMode mode = selectedMode.equals("Simple game")
-        			? SOSGame.GameMode.SIMPLE
-        			: SOSGame.GameMode.GENERAL;
-        	game = new SOSGame(size, mode);
+        	SOSGame.GameMode mode = selectedMode.equals("Simple game") ? SOSGame.GameMode.SIMPLE : SOSGame.GameMode.GENERAL;
+        	game = new SOSGame(size, mode, this);
         	updateBoardDisplay();
         	instructionLabel.setText("Current Turn: Blue Player");
         	instructionLabel.setTextFill(Color.BLUE);
@@ -153,7 +154,7 @@ public class SOSGameGUI extends Application {
                 		} else {
                 			selectedLetter = redPlayerRadio.getSelectedButton();
                 		}
-                		game.makeMove(r,  c,  selectedLetter.charAt(0));
+                		game.makeMove(r, c, selectedLetter.charAt(0));
                 		cell.setText(selectedLetter);
                 		// Switch players and show turn.
                 		game.switchPlayer();
@@ -171,6 +172,50 @@ public class SOSGameGUI extends Application {
             }
         }	
     }
+    
+    /*
+     * Draws line at appropriate angle over cells forming SOS pattern.
+     * 
+     * @param row the row to draw on
+     * @param col the column to draw on
+     * @param color the player color (RED or BLUE)
+     * @param angle the value used to determine the line angle
+     */
+    public void drawLine(int row, int col, Player color, int angle) {
+    	System.out.println("Row" + row + "Col" + col);
+    	Line line = new Line(0, 0, 0, 0);
+    	switch(angle) {
+    	case -1:
+    		line.setEndX(47);
+    		line.setEndY(36);
+    		break;
+    	case 0: 
+    		line.setEndX(47);
+    		line.setEndY(0);
+    		break;
+    	case 1:
+    		line.setEndX(47);
+    		line.setEndY(-36);
+    		break;
+    	case 2:
+    		line.setStartX(25);
+    		line.setStartY(0);
+    		line.setEndX(25);
+    		line.setEndY(36);
+    		break;
+    	default:
+    		break;
+    	}
+		line.setStrokeWidth(2);
+		if (color == Player.BLUE) {
+			line.setStroke(Color.BLUE);
+		} else {
+			line.setStroke(Color.RED);
+		}
+		GridPane.setHalignment(line, HPos.CENTER);
+		boardGrid.add(line, col, row);
+    }
+    
     
     /**
      * Main entry point for the application.

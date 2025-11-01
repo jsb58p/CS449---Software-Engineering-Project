@@ -44,6 +44,7 @@ public class SOSGame {
 	private char[][] board;
 	private GameModeLogic gameModeLogic;
 	private BoundaryCheck bounds;
+	private SOSGameGUI gui;
 	
 	
 	/**
@@ -51,10 +52,12 @@ public class SOSGame {
 	 * 
 	 * @param boardSize the size of the board (e.g. 3 for 3x3)
 	 * @param gameMode the game mode (SIMPLE or GENERAL)
+	 * @param gui the SOSGameGUI instance
 	 */
-	public SOSGame(int boardSize, GameMode gameMode) {
+	public SOSGame(int boardSize, GameMode gameMode, SOSGameGUI gui) {
 		this.boardSize = boardSize;
 		this.gameMode = gameMode;
+		this.gui = gui;
 		this.board = new char[boardSize][boardSize];
 		this.currentPlayer = Player.BLUE;
 		bounds = new BoundaryCheck(boardSize);
@@ -170,6 +173,7 @@ public class SOSGame {
 	/**
 	 * Checks if the most recent move formed any "SOS" patterns and counts them.
 	 * It first checks the horizontal and diagonal for a given letter, then vertical.
+	 * Determines which cells to draw the line in.
 	 * 
 	 * @param row the row index
 	 * @param col the column index
@@ -178,55 +182,123 @@ public class SOSGame {
 	 */
 	public int checkScore(int row, int col, char letter) {
 		int sosCount = 0;
-		for(int i = -1; i <= 1; i++) {
-			// Horizontal and diagonal check for "SOS".
+		if(gui != null) {
+			for(int i = -1; i <= 1; i++) {
+				// Horizontal and diagonal check for "SOS".
+				switch (letter) {
+				case 'S':
+					if(bounds.boundsCheck(Bound.SRIGHTBOUND, row, col, i) && board[row-i][col+1] == 'O') {
+					    if(bounds.boundsCheck(Bound.SRIGHTBOUND2, row, col, i) && board[row - (2*i)][col + 2] == 'S') {
+					        sosCount++;
+					        System.out.println("SOS");
+							switch(i) {
+							case -1:
+								for(int j = 0; j < 3; j++) {
+									gui.drawLine(row+j, col+j, getCurrentPlayer(), i);	
+								}
+								break;
+							case 0:
+								for(int j = 0; j < 3; j++) {
+									gui.drawLine(row, col+j, getCurrentPlayer(), i);
+								}
+								break;
+							case 1:
+								for(int j = 0; j < 3; j++) {
+									gui.drawLine(row-j, col+j, getCurrentPlayer(), i);
+								}
+								break;
+							default:
+								break;
+							}
+					    }
+					}
+					if (bounds.boundsCheck(Bound.SLEFTBOUND, row, col, i) && board[row+i][col-1] == 'O') {
+						if(bounds.boundsCheck(Bound.SLEFTBOUND2, row, col, i) && board[row + (2*i)][col - 2] == 'S') {
+					        sosCount++;
+					        System.out.println("SOS");
+					        switch(i) {
+							case -1:
+								for(int j = 0; j < 3; j++) {
+									gui.drawLine(row-j, col-j, getCurrentPlayer(), i);	
+								}
+								break;
+							case 0:
+								for(int j = 0; j < 3; j++) {
+									gui.drawLine(row, col-j, getCurrentPlayer(), i);
+								}
+								break;
+							case 1:
+								for(int j = 0; j < 3; j++) {
+									gui.drawLine(row+j, col-j, getCurrentPlayer(), i);
+								}
+								break;
+							default:
+								break;
+							}
+					    }
+					}
+					break;
+				case 'O':
+					if(bounds.boundsCheck(Bound.OHORIZONTALBOUND, row, col, i) && board[row-i][col+1] == 'S' && board[row+i][col-1] == 'S') {
+						System.out.println("SOS");
+						sosCount++;
+						switch(i) {
+						case -1:
+							for(int j = -1; j <= 1; j++) {
+								gui.drawLine(row-j, col-j, getCurrentPlayer(), i);	
+							}
+							break;
+						case 0:
+							for(int j = -1; j <= 1; j++) {
+								gui.drawLine(row, col-j, getCurrentPlayer(), i);
+							}
+							break;
+						case 1:
+							for(int j = -1; j <= 1; j++) {
+								gui.drawLine(row+j, col-j, getCurrentPlayer(), i);
+							}
+							break;
+						default:
+							break;
+						}
+					} 
+					break;
+				}
+			}
+			// Vertical check for "SOS".
 			switch (letter) {
 			case 'S':
-				if(bounds.boundsCheck(Bound.SRIGHTBOUND, row, col, i) && board[row-i][col+1] == 'O') {
-				    if(bounds.boundsCheck(Bound.SRIGHTBOUND2, row, col, i) && board[row - (2*i)][col + 2] == 'S') {
-				        sosCount++;
-				        System.out.println("SOS");
-				    }
+				if(bounds.boundsCheck(Bound.SUPBOUND, row, col) && board[row+1][col] == 'O') { 
+					if(bounds.boundsCheck(Bound.SUPBOUND2, row, col) && board[row+2][col] == 'S') { 
+						for(int i = 0; i < 3; i++) {
+							gui.drawLine(row+i, col, getCurrentPlayer(), 2);
+						}	
+					System.out.println("SOS");
+					sosCount++;
+					}
 				}
-				if (bounds.boundsCheck(Bound.SLEFTBOUND, row, col, i) && board[row+i][col-1] == 'O') {
-					if(bounds.boundsCheck(Bound.SLEFTBOUND2, row, col, i) && board[row + (2*i)][col - 2] == 'S') {
-				        sosCount++;
-				        System.out.println("SOS");
-				    }
+				if(bounds.boundsCheck(Bound.SDOWNBOUND, row, col) && board[row-1][col] == 'O') {
+					if(bounds.boundsCheck(Bound.SDOWNBOUND2, row, col) && board[row-2][col] == 'S') {
+						for(int i = 0; i < 3; i++) {
+							gui.drawLine(row-i, col, getCurrentPlayer(), 2);
+						}
+						System.out.println("SOS");
+						sosCount++;
+					}
 				}
 				break;
 			case 'O':
-				if(bounds.boundsCheck(Bound.OHORIZONTALBOUND, row, col, i) && board[row-i][col+1] == 'S' && board[row+i][col-1] == 'S') {
+				if(bounds.boundsCheck(Bound.OVERTICALBOUND, row, col) && board[row+1][col] == 'S' && board[row-1][col] == 'S') {
+					for(int i = -1; i <= 1; i++) {
+						gui.drawLine(row-i, col, getCurrentPlayer(), 2);
+					}
 					System.out.println("SOS");
 					sosCount++;
-				} 
+				}
 				break;
 			}
+			System.out.println(sosCount);
 		}
-		// Vertical check for "SOS".
-		switch (letter) {
-		case 'S':
-			if(bounds.boundsCheck(Bound.SUPBOUND, row, col) && board[row+1][col] == 'O') { 
-				if(bounds.boundsCheck(Bound.SUPBOUND2, row, col, 0) && board[row+2][col] == 'S') { 
-					System.out.println("SOS");
-					sosCount++;
-				}
-			}
-			if(bounds.boundsCheck(Bound.SDOWNBOUND, row, col) && board[row-1][col] == 'O') {
-				if(bounds.boundsCheck(Bound.SDOWNBOUND2, row, col) && board[row-2][col] == 'S') {
-					System.out.println("SOS");
-					sosCount++;
-				}
-			}
-			break;
-		case 'O':
-			if(bounds.boundsCheck(Bound.OVERTICALBOUND, row, col) && board[row+1][col] == 'S' && board[row-1][col] == 'S') {
-				System.out.println("SOS");
-				sosCount++;
-			}
-			break;
-		}
-		 System.out.println(sosCount);
 		return sosCount;
 	}
 }
