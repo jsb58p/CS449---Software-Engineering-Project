@@ -41,7 +41,7 @@ public abstract class GameModeLogic{
 		if (player == SOSGame.Player.BLUE) {
 			blueScore += points;
 		} else {
-			redScore += points;
+			redScore += points; 
 		}
 	}
 	

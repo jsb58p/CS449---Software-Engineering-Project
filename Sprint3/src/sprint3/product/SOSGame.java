@@ -22,11 +22,28 @@ public class SOSGame {
 		RED
 	}
 	
+	/**
+	 * Represents the array boundaries to be checked.
+	 */
+	public enum Bound {
+		OHORIZONTALBOUND,
+		SLEFTBOUND,
+		SLEFTBOUND2,
+		SRIGHTBOUND,
+		SRIGHTBOUND2,
+		OVERTICALBOUND,
+		SUPBOUND,
+		SUPBOUND2,
+		SDOWNBOUND,
+		SDOWNBOUND2
+	}
+	
 	private Player currentPlayer;
 	private int boardSize;
 	private GameMode gameMode;
 	private char[][] board;
 	private GameModeLogic gameModeLogic;
+	private BoundaryCheck bounds;
 	
 	
 	/**
@@ -40,6 +57,7 @@ public class SOSGame {
 		this.gameMode = gameMode;
 		this.board = new char[boardSize][boardSize];
 		this.currentPlayer = Player.BLUE;
+		bounds = new BoundaryCheck(boardSize);
 
 		if (gameMode == GameMode.SIMPLE) {
 			gameModeLogic = new SimpleMode(this);
@@ -161,48 +179,48 @@ public class SOSGame {
 	public int checkScore(int row, int col, char letter) {
 		int sosCount = 0;
 		for(int i = -1; i <= 1; i++) {
-			// Horizontal and diagonals check for "SOS".
+			// Horizontal and diagonal check for "SOS".
 			switch (letter) {
 			case 'S':
-				if(col + 1 < boardSize && row - i >= 0 && row - i < boardSize && board[row-i][col+1] == 'O') {
-				    if(row - (2*i) >= 0 && row - (2*i) < boardSize && col + 2 < boardSize && board[row - (2*i)][col + 2] == 'S') {
+				if(bounds.boundsCheck(Bound.SRIGHTBOUND, row, col, i) && board[row-i][col+1] == 'O') {
+				    if(bounds.boundsCheck(Bound.SRIGHTBOUND2, row, col, i) && board[row - (2*i)][col + 2] == 'S') {
 				        sosCount++;
 				        System.out.println("SOS");
 				    }
 				}
-				if (col - 1 >= 0 && row + i >= 0 && row + i < boardSize && board[row+i][col-1] == 'O') {
-					if(row + (2*i) >= 0 && row + (2*i) < boardSize && col - 2 >= 0 && board[row + (2*i)][col - 2] == 'S') {
+				if (bounds.boundsCheck(Bound.SLEFTBOUND, row, col, i) && board[row+i][col-1] == 'O') {
+					if(bounds.boundsCheck(Bound.SLEFTBOUND2, row, col, i) && board[row + (2*i)][col - 2] == 'S') {
 				        sosCount++;
 				        System.out.println("SOS");
 				    }
 				}
 				break;
 			case 'O':
-				if(col + 1 < boardSize && col - 1 >= 0 && row - i >= 0 && row - i < boardSize && row + i >= 0 && row + i < boardSize && board[row-i][col+1] == 'S' && board[row+i][col-1] == 'S') {
+				if(bounds.boundsCheck(Bound.OHORIZONTALBOUND, row, col, i) && board[row-i][col+1] == 'S' && board[row+i][col-1] == 'S') {
 					System.out.println("SOS");
 					sosCount++;
 				} 
 				break;
 			}
 		}
-		// Verticals check for "SOS".
+		// Vertical check for "SOS".
 		switch (letter) {
 		case 'S':
-			if(row + 1 < boardSize && board[row+1][col] == 'O') { 
-				if(row + 2 < boardSize && board[row+2][col] == 'S') { 
+			if(bounds.boundsCheck(Bound.SUPBOUND, row, col) && board[row+1][col] == 'O') { 
+				if(bounds.boundsCheck(Bound.SUPBOUND2, row, col, 0) && board[row+2][col] == 'S') { 
 					System.out.println("SOS");
 					sosCount++;
 				}
 			}
-			if(row - 1 >= 0 && board[row-1][col] == 'O') {
-				if(row - 2 >= 0 && board[row-2][col] == 'S') {
+			if(bounds.boundsCheck(Bound.SDOWNBOUND, row, col) && board[row-1][col] == 'O') {
+				if(bounds.boundsCheck(Bound.SDOWNBOUND2, row, col) && board[row-2][col] == 'S') {
 					System.out.println("SOS");
 					sosCount++;
 				}
 			}
 			break;
 		case 'O':
-			if(row - 1 >= 0 && row + 1 < boardSize && board[row+1][col] == 'S' && board[row-1][col] == 'S') {
+			if(bounds.boundsCheck(Bound.OVERTICALBOUND, row, col) && board[row+1][col] == 'S' && board[row-1][col] == 'S') {
 				System.out.println("SOS");
 				sosCount++;
 			}
@@ -211,5 +229,4 @@ public class SOSGame {
 		 System.out.println(sosCount);
 		return sosCount;
 	}
-	
 }
