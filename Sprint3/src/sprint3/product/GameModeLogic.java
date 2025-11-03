@@ -29,6 +29,9 @@ public abstract class GameModeLogic{
 	public void handleMove(int row, int col, char letter, SOSGame.Player player) {
 		int sosFormed = game.checkScore(row, col, letter);
 		updateScore(player, sosFormed);
+		if(!shouldPlayerContinue(sosFormed)) {
+			game.switchPlayer();
+		}
 	}
 	
 	/**

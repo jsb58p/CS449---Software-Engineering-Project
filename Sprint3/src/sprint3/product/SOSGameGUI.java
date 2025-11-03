@@ -29,6 +29,8 @@ public class SOSGameGUI extends Application {
 	private RadioButtonGroup bluePlayerRadio;
 	private RadioButtonGroup redPlayerRadio;
 	private Label instructionLabel;
+	private Label bluePoints = new Label(" ");
+	private Label redPoints = new Label(" ");
     
 	/**
 	 * Starts the JavaFX application and sets up the main window.
@@ -60,6 +62,9 @@ public class SOSGameGUI extends Application {
         
         Button newGameButton = new Button("New Game");
         newGameButton.setOnAction(e -> {
+        	boardGrid.setDisable(false);
+        	bluePoints.setText(" ");
+        	redPoints.setText(" ");
         	int size = boardSizeSpinner.getValue();
         	String selectedMode = gameMode.getSelectedButton();
         	SOSGame.GameMode mode = selectedMode.equals("Simple game") ? SOSGame.GameMode.SIMPLE : SOSGame.GameMode.GENERAL;
@@ -93,8 +98,11 @@ public class SOSGameGUI extends Application {
         
         bluePlayerRadio = new RadioButtonGroup("S", "O");
         bluePlayerRadio.selectFirst();
+        
+    	bluePoints.setTextFill(Color.BLUE);
+    	bluePoints.setStyle("-fx-font-size: 30");
                 
-        leftSection.getChildren().addAll(blueLabel, bluePlayerRadio);
+        leftSection.getChildren().addAll(blueLabel, bluePlayerRadio, bluePoints);
         root.setLeft(leftSection);
         
         //Right section.
@@ -107,7 +115,10 @@ public class SOSGameGUI extends Application {
         redPlayerRadio = new RadioButtonGroup("S", "O");
         redPlayerRadio.selectFirst();
         
-        rightSection.getChildren().addAll(redLabel, redPlayerRadio);
+    	redPoints.setTextFill(Color.RED);
+    	redPoints.setStyle("-fx-font-size: 30");
+        
+        rightSection.getChildren().addAll(redLabel, redPlayerRadio, redPoints);
         root.setRight(rightSection);
         
         // Bottom section.
@@ -116,13 +127,14 @@ public class SOSGameGUI extends Application {
         bottomSection.setPadding(new Insets(10));
         
         instructionLabel = new Label("Current Turn:");
+    	instructionLabel.setStyle("-fx-font-size: 15");
         CheckBox checkbox1 = new CheckBox("Record Game");
         
         bottomSection.getChildren().addAll(instructionLabel, checkbox1);
         root.setBottom(bottomSection);
 
         // Create scene and show window.
-        Scene scene = new Scene(root, 400, 400);
+        Scene scene = new Scene(root, 800, 600);
         primaryStage.setTitle("SOS Game");
         primaryStage.setScene(scene);                             
         primaryStage.show();
@@ -156,8 +168,10 @@ public class SOSGameGUI extends Application {
                 		}
                 		game.makeMove(r, c, selectedLetter.charAt(0));
                 		cell.setText(selectedLetter);
-                		// Switch players and show turn.
-                		game.switchPlayer();
+                		if(boardGrid.isDisabled()) { // Checks if game is over before switching players.
+                			return;
+                		}
+                		// Show current player turn.
                 		Player nextPlayer = game.getCurrentPlayer();
                 		if (nextPlayer == Player.BLUE) {
                 			instructionLabel.setText("Current Turn: Blue Player");
@@ -182,7 +196,6 @@ public class SOSGameGUI extends Application {
      * @param angle the value used to determine the line angle
      */
     public void drawLine(int row, int col, Player color, int angle) {
-    	System.out.println("Row" + row + "Col" + col);
     	Line line = new Line(0, 0, 0, 0);
     	switch(angle) {
     	case -1:
@@ -207,6 +220,7 @@ public class SOSGameGUI extends Application {
     		break;
     	}
 		line.setStrokeWidth(2);
+		// Set line color.
 		if (color == Player.BLUE) {
 			line.setStroke(Color.BLUE);
 		} else {
@@ -214,6 +228,34 @@ public class SOSGameGUI extends Application {
 		}
 		GridPane.setHalignment(line, HPos.CENTER);
 		boardGrid.add(line, col, row);
+    }
+    
+    
+    /*
+     * Sets the display after a player has won.
+     * 
+     * @param playerColor the player color that won (BLUE or RED)
+     * @param blueScore the blue player's score
+     * @param redScore the red player's score
+     */
+    public void endGameDisplay(Player playerColor, int blueScore, int redScore) {
+    	boardGrid.setDisable(true);
+    	switch(playerColor){
+    	case BLUE:
+    		instructionLabel.setTextFill(Color.BLUE);
+    		instructionLabel.setText("Blue Player Wins!");
+    		break;
+    	case RED:
+    		instructionLabel.setTextFill(Color.RED);
+        	instructionLabel.setText("Red Player Wins!");
+        	break;
+    	default:
+    		instructionLabel.setTextFill(Color.BLACK);
+        	instructionLabel.setText("Draw.");
+        	break;
+    	}
+    	bluePoints.setText(String.valueOf(blueScore));
+    	redPoints.setText(String.valueOf(redScore));
     }
     
     

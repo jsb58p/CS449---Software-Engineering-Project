@@ -19,7 +19,8 @@ public class SOSGame {
 	 */
 	public enum Player {
 		BLUE,
-		RED
+		RED,
+		NONE
 	}
 	
 	/**
@@ -166,7 +167,7 @@ public class SOSGame {
 		gameModeLogic.handleMove(row, col, letter, currentPlayer);
 		
 		if (gameModeLogic.isGameOver()) {
-			gameModeLogic.getWinner();
+			gui.endGameDisplay(gameModeLogic.getWinner(), gameModeLogic.blueScore, gameModeLogic.redScore);
 		}
 	}
 	
@@ -297,7 +298,6 @@ public class SOSGame {
 				}
 				break;
 			}
-			System.out.println(sosCount);
 		}
 		return sosCount;
 	}

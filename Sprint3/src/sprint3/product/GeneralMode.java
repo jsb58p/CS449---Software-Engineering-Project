@@ -23,7 +23,7 @@ public class GeneralMode extends GameModeLogic {
 	@Override
 	public boolean isGameOver() {
 		char[][] board = game.getBoard();
-		for (int i = 0; i < game.getBoardSize(); i ++) {
+		for (int i = 0; i < game.getBoardSize(); i++) {
 			for (int j = 0; j < game.getBoardSize(); j++){
 				if(board[i][j] == ' ') {
 					return false;
@@ -49,7 +49,7 @@ public class GeneralMode extends GameModeLogic {
 			return SOSGame.Player.RED;
 		}
 		System.out.println("Draw");
-		return null;
+		return SOSGame.Player.NONE;
 	}
 	
 	/**
@@ -60,6 +60,7 @@ public class GeneralMode extends GameModeLogic {
 	 */
 	@Override
 	public boolean shouldPlayerContinue(int sosFormed) {
+		System.out.println(String.valueOf(sosFormed > 0));
 		return sosFormed > 0;
 	}
 }
