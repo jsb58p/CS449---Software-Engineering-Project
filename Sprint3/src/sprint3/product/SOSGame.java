@@ -301,4 +301,22 @@ public class SOSGame {
 		}
 		return sosCount;
 	}
+	
+	/**
+	 * Checks if the game is over.
+	 * 
+	 * @return true if the game has ended, false otherwise
+	 */
+	public boolean isGameOver() {
+	    return gameModeLogic.isGameOver();
+	}
+
+	/**
+	 * Gets the winner of the game.
+	 * 
+	 * @return the winning player
+	 */
+	public Player getWinner() {
+	    return gameModeLogic.getWinner();
+	}
 }

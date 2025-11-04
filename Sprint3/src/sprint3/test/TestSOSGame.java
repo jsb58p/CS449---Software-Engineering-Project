@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import sprint2.product.SOSGame;
+import sprint3.product.SOSGame;
 
 /**
  * Unit tests for the SOSGame and related components.
@@ -22,8 +22,8 @@ public class TestSOSGame {
    */
   @BeforeEach
   public void setUp() {
-    simpleGame = new SOSGame(5, SOSGame.GameMode.SIMPLE);
-    generalGame = new SOSGame(7, SOSGame.GameMode.GENERAL);
+    simpleGame = new SOSGame(5, SOSGame.GameMode.SIMPLE, null);
+    generalGame = new SOSGame(7, SOSGame.GameMode.GENERAL, null);
   }
 
   /**
@@ -66,7 +66,6 @@ public class TestSOSGame {
     assertTrue(simpleGame.isCellEmpty(1, 1), "Cell (1,1) should be empty initially");
     simpleGame.makeMove(1, 1, 'S');
     assertEquals('S', simpleGame.getBoard()[1][1], "Cell (1,1) should contain 'S'");
-    simpleGame.switchPlayer();
     assertEquals(SOSGame.Player.RED, simpleGame.getCurrentPlayer(), "Player should switch to RED");
   }
 
@@ -78,8 +77,33 @@ public class TestSOSGame {
     assertTrue(generalGame.isCellEmpty(2, 2), "Cell (2,2) should be empty initially");
     generalGame.makeMove(2, 2, 'O');
     assertEquals('O', generalGame.getBoard()[2][2], "Cell (2,2) should contain 'O'");
-    generalGame.switchPlayer();
     assertEquals(SOSGame.Player.RED, generalGame.getCurrentPlayer(), "Player should switch to RED");
+  }
+  
+  @Test
+  public void testSimpleGameIsOver() {
+      char[][] board = simpleGame.getBoard();
+      for (int i = 0; i < 5; i++) {
+          for (int j = 0; j < 5; j++) {
+              board[i][j] = 'O';
+          }
+      }
+      assertTrue(simpleGame.isGameOver(), "Simple game should be over when board is full");
+  }
+
+  @Test
+  public void testGeneralGameIsOver() {
+      for (int i = 0; i < 7; i++) {
+          for (int j = 0; j < 7; j++) {
+              if (i == 6 && j == 6) break;
+              generalGame.makeMove(i, j, (i + j) % 2 == 0 ? 'S' : 'O');
+          }
+      }
+
+      char[][] board = generalGame.getBoard();
+      board[6][6] = 'S';
+      
+      assertTrue(generalGame.isGameOver(), "General game should be over when board is full");
   }
 
 }

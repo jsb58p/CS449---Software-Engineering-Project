@@ -49,7 +49,7 @@ public class SOSGameGUI extends Application {
         topSection.setAlignment(Pos.CENTER);
         
         Label titleLabel = new Label("SOS");
-        titleLabel.setTextFill(Color.BLUE);
+        titleLabel.setTextFill(Color.PURPLE);
         titleLabel.setStyle("-fx-font-size: 20px;");
         
         Spinner<Integer> boardSizeSpinner = new Spinner<>();

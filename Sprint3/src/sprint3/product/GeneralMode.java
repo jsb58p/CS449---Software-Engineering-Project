@@ -36,7 +36,7 @@ public class GeneralMode extends GameModeLogic {
 	/**
 	 * Determines the winner of the game.
 	 * 
-	 * @return the winning player, or null if the game is a draw
+	 * @return the winning player, or NONE if the game is a draw
 	 */
 	@Override
 	public SOSGame.Player getWinner(){
@@ -56,11 +56,10 @@ public class GeneralMode extends GameModeLogic {
 	 * Determines if the current player should continue their turn.
 	 * 
 	 * @param sosFormed the number of SOS patterns formed in the last move
-	 * @return true if the player formed at least one SOS, false otherwise
+	 * @return if the player formed at least one SOS, false otherwise
 	 */
 	@Override
 	public boolean shouldPlayerContinue(int sosFormed) {
-		System.out.println(String.valueOf(sosFormed > 0));
 		return sosFormed > 0;
 	}
 }

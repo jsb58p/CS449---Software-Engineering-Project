@@ -39,7 +39,7 @@ public abstract class GameModeLogic{
 	 * 
 	 * @param points the number of points to add
 	 */
-	protected void updateScore(SOSGame.Player player, int points) {
+	private void updateScore(SOSGame.Player player, int points) {
 		if (player == SOSGame.Player.BLUE) {
 			blueScore += points;
 		} else {
@@ -48,16 +48,16 @@ public abstract class GameModeLogic{
 	}
 	
 	/**
-	 * Checks if the game is over according to mode rules.
+	 * Checks if the game is over according to mode rules (Simple or General).
 	 * 
 	 * @return true if the game has ended, false otherwise
 	 */
 	public abstract boolean isGameOver();
 	
 	/**
-	 * Determines the winner according to mode rules.
+	 * Determines the winner according to mode rules (Simple or General).
 	 * 
-	 * @return the winning player, or null if the game is a draw
+	 * @return the winning player, or NONE if the game is a draw
 	 */
 	public abstract SOSGame.Player getWinner();
 	

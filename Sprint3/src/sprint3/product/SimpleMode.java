@@ -40,7 +40,7 @@ public class SimpleMode extends GameModeLogic {
 	/**
 	 * Determine which player is the winner.
 	 * 
-	 * @return the winning player, or null if no one has scored yet
+	 * @return the winning player, or NONE if no one has scored yet
 	 */
 	@Override
 	public SOSGame.Player getWinner() {
@@ -53,7 +53,7 @@ public class SimpleMode extends GameModeLogic {
 			return SOSGame.Player.RED;
 		}
 		System.out.println("Draw");
-		return null;
+		return SOSGame.Player.NONE;
 	}
 	
 	/**
