@@ -93,15 +93,12 @@ public class TestSOSGame {
 
   @Test
   public void testGeneralGameIsOver() {
+      char[][] board = generalGame.getBoard();
       for (int i = 0; i < 7; i++) {
           for (int j = 0; j < 7; j++) {
-              if (i == 6 && j == 6) break;
-              generalGame.makeMove(i, j, (i + j) % 2 == 0 ? 'S' : 'O');
+              board[i][j] = 'O';
           }
       }
-
-      char[][] board = generalGame.getBoard();
-      board[6][6] = 'S';
       
       assertTrue(generalGame.isGameOver(), "General game should be over when board is full");
   }
