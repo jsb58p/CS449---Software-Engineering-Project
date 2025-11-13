@@ -33,12 +33,8 @@ public class BoundaryCheck {
 		case OHORIZONTALBOUND:
 			return (col + 1 < boardSize && col - 1 >= 0 && row - i >= 0 && row - i < boardSize && row + i >= 0 && row + i < boardSize);
 		case SLEFTBOUND:
-			return (col - 1 >= 0 && row + i >= 0 && row + i < boardSize);
-		case SLEFTBOUND2:
 			return (row + (2*i) >= 0 && row + (2*i) < boardSize && col - 2 >= 0);
 		case SRIGHTBOUND:
-			return (col + 1 < boardSize && row - i >= 0 && row - i < boardSize);
-		case SRIGHTBOUND2:
 			return (row - (2*i) >= 0 && row - (2*i) < boardSize && col + 2 < boardSize);
 		default:
 			return false;
@@ -58,12 +54,8 @@ public class BoundaryCheck {
 		case OVERTICALBOUND:
 			return (row - 1 >= 0 && row + 1 < boardSize);
 		case SUPBOUND:
-			return (row + 1 < boardSize);
-		case SUPBOUND2:
 			return (row + 2 < boardSize);
 		case SDOWNBOUND:
-			return (row - 1 >= 0);
-		case SDOWNBOUND2:
 			return (row - 2 >= 0);
 		default:
 			return false;

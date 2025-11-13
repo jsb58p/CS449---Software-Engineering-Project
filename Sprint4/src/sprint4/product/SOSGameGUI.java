@@ -54,6 +54,10 @@ public class SOSGameGUI extends Application {
         titleLabel.setTextFill(Color.PURPLE);
         titleLabel.setStyle("-fx-font-size: 20px;");
         
+        Label sizeLabel = new Label("Board Size:");
+        sizeLabel.setStyle("-fx-font-size: 16px");
+        sizeLabel.setPadding(new Insets(0, -20, 0, 0));
+        
         Spinner<Integer> boardSizeSpinner = new Spinner<>();
         boardSizeSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(3, 10, 3));
         boardSizeSpinner.setMaxWidth(60);
@@ -77,7 +81,7 @@ public class SOSGameGUI extends Application {
         	System.out.println("New game started: " + size + "x" + size + ", " + mode);
         });
         
-        topSection.getChildren().addAll(titleLabel, gameMode, boardSizeSpinner, newGameButton);
+        topSection.getChildren().addAll(titleLabel, gameMode, sizeLabel, boardSizeSpinner, newGameButton);
         root.setTop(topSection);
         
         // Center section.

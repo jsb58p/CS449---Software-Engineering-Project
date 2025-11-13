@@ -29,14 +29,10 @@ public class SOSGame {
 	public enum Bound {
 		OHORIZONTALBOUND,
 		SLEFTBOUND,
-		SLEFTBOUND2,
 		SRIGHTBOUND,
-		SRIGHTBOUND2,
 		OVERTICALBOUND,
 		SUPBOUND,
-		SUPBOUND2,
 		SDOWNBOUND,
-		SDOWNBOUND2
 	}
 	
 	private Player currentPlayer;
@@ -189,7 +185,7 @@ public class SOSGame {
 				switch (letter) {
 				case 'S':
 					if(bounds.boundsCheck(Bound.SRIGHTBOUND, row, col, i) && board[row-i][col+1] == 'O') {
-					    if(bounds.boundsCheck(Bound.SRIGHTBOUND2, row, col, i) && board[row - (2*i)][col + 2] == 'S') {
+					    if(board[row - (2*i)][col + 2] == 'S') {
 					        sosCount++;
 					        System.out.println("SOS");
 							switch(i) {
@@ -214,7 +210,7 @@ public class SOSGame {
 					    }
 					}
 					if (bounds.boundsCheck(Bound.SLEFTBOUND, row, col, i) && board[row+i][col-1] == 'O') {
-						if(bounds.boundsCheck(Bound.SLEFTBOUND2, row, col, i) && board[row + (2*i)][col - 2] == 'S') {
+						if(board[row + (2*i)][col - 2] == 'S') {
 					        sosCount++;
 					        System.out.println("SOS");
 					        switch(i) {
@@ -270,7 +266,7 @@ public class SOSGame {
 			switch (letter) {
 			case 'S':
 				if(bounds.boundsCheck(Bound.SUPBOUND, row, col) && board[row+1][col] == 'O') { 
-					if(bounds.boundsCheck(Bound.SUPBOUND2, row, col) && board[row+2][col] == 'S') { 
+					if(board[row+2][col] == 'S') { 
 						for(int i = 0; i < 3; i++) {
 							gui.drawLine(row+i, col, getCurrentPlayer(), 2);
 						}	
@@ -279,7 +275,7 @@ public class SOSGame {
 					}
 				}
 				if(bounds.boundsCheck(Bound.SDOWNBOUND, row, col) && board[row-1][col] == 'O') {
-					if(bounds.boundsCheck(Bound.SDOWNBOUND2, row, col) && board[row-2][col] == 'S') {
+					if(board[row-2][col] == 'S') {
 						for(int i = 0; i < 3; i++) {
 							gui.drawLine(row-i, col, getCurrentPlayer(), 2);
 						}
