@@ -407,4 +407,22 @@ public class SOSGame {
 	public Player getWinner() {
 	    return gameModeLogic.getWinner();
 	}
+	
+	/**
+	 * Gets the blue player score.
+	 * 
+	 * @return
+	 */
+	public int getBlueScore() {
+		return gameModeLogic.blueScore;
+	}
+	
+	/**
+	 * Gets the red player score
+	 * 
+	 * @return
+	 */
+	public int getRedScore() {
+		return gameModeLogic.redScore;
+	}
 }

@@ -69,6 +69,8 @@ public class SOSGameGUI extends Application {
         
         Button newGameButton = new Button("New Game");
         newGameButton.setOnAction(e -> {
+        	instructionLabel.setText("Current Turn: Blue Player");
+        	instructionLabel.setTextFill(Color.BLUE);
         	boardGrid.setDisable(false);
         	bluePoints.setText(" ");
         	redPoints.setText(" ");
@@ -77,8 +79,6 @@ public class SOSGameGUI extends Application {
         	SOSGame.GameMode mode = selectedMode.equals("Simple game") ? SOSGame.GameMode.SIMPLE : SOSGame.GameMode.GENERAL;
         	game = new SOSGame(size, mode, this);
         	updateBoardDisplay();
-        	instructionLabel.setText("Current Turn: Blue Player");
-        	instructionLabel.setTextFill(Color.BLUE);
         	System.out.println("New game started: " + size + "x" + size + ", " + mode);
         });
         
@@ -167,6 +167,7 @@ public class SOSGameGUI extends Application {
     	boardGrid.getChildren().clear();
     	int size = game.getBoardSize();
     	char[][] board = game.getBoard();
+
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
                 final int r = row;
@@ -199,27 +200,41 @@ public class SOSGameGUI extends Application {
                 			instructionLabel.setText("Current Turn: Red Player");
                 			instructionLabel.setTextFill(Color.RED);
                 		}
-                		// Computer move
-                		int[] move;
-                		while ((move = game.cpuMoveCheck()) != null) {
-                		    int cpuRow = move[0];
-                		    int cpuCol = move[1];
-                		    char letter = game.getBoard()[cpuRow][cpuCol];
-                		    board[cpuRow][cpuCol] = letter;
-                		    ((Button) boardGrid.getChildren().get(cpuRow * size + cpuCol)).setText(String.valueOf(letter));
-                		    int score = game.checkScore(cpuRow, cpuCol, letter, false);
-                		    if("Simple game".equals(selectedMode) && score > 0) {
-                				break;
-                			}
-                		}
+                			computerMove();
                 	}
                 });
                 boardGrid.add(cell, col, row);
             }
-        }	
+        }
+        
+    	if ("Computer".equals(bluePlayerOpponent.getSelectedButton())) {
+    		computerMove();
+    	}
     }
     
-    /*
+    /**
+     * Updates display with computer move
+     */
+    private void computerMove() {
+    	int[] move;
+    	int size = game.getBoardSize();
+    	char[][] board = game.getBoard();
+    	while ((move = game.cpuMoveCheck()) != null) {
+    	    int cpuRow = move[0];
+    	    int cpuCol = move[1];
+    	    char letter = game.getBoard()[cpuRow][cpuCol];
+    	    board[cpuRow][cpuCol] = letter;
+    	    ((Button) boardGrid.getChildren().get(cpuRow * size + cpuCol)).setText(String.valueOf(letter));
+    	    if(game.isGameOver()) {
+    			System.out.println("CPU end game");
+    			endGameDisplay(game.getWinner(), getBlueScore(), getRedScore());
+    			break;
+    		}
+    	}
+    }
+	
+    
+    /**
      * Draws line at appropriate angle over cells forming SOS pattern.
      * 
      * @param row the row to draw on
@@ -263,7 +278,7 @@ public class SOSGameGUI extends Application {
     }
     
     
-    /*
+    /**
      * Sets the display after a player has won.
      * 
      * @param playerColor the player color that won (BLUE or RED)
@@ -326,6 +341,23 @@ public class SOSGameGUI extends Application {
     	return redPlayerRadio.getSelectedButton();
     }
     
+    /**
+     * Get the blue player score.
+     * 
+     * @return the blue player score
+     */
+    public int getBlueScore() {
+    	return game.getBlueScore();
+    }
+    
+    /**
+     * Get the red player score.
+     * 
+     * @return the red player score
+     */
+    public int getRedScore() {
+    	return game.getRedScore();
+    }
     
     /**
      * Main entry point for the application.

@@ -13,7 +13,6 @@ public class CpuOpponentS extends ComputerOpponent {
 		super(game);
 	}
 	
-	
 	/**
 	 * Chooses a board cell for computer opponent to place letter 'S'
 	 * 
@@ -26,8 +25,8 @@ public class CpuOpponentS extends ComputerOpponent {
 		
 		int highestIndex = -1;
 		int highestScore = -1;
-		
 		int index = 0;
+		
 		for(int row = 0; row < boardSize; row++) {
 			for(int col = 0; col < boardSize; col++) {
 				if(game.getBoard()[row][col] == ' ') {
