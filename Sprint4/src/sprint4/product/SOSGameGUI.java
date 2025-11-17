@@ -176,7 +176,7 @@ public class SOSGameGUI extends Application {
                 cell.setMinSize(50, 40);
                 cell.setMaxSize(50, 40);
                 cell.setAlignment(Pos.CENTER);
-                cell.setStyle("-fx-border-color: black; -fx-border-width: 1;");
+                cell.setStyle("-fx-border-color: black; -fx-border-width: 1; -fx-font-weight: bold;");
                 // Wire up cells on game board.
                 cell.setOnAction(e -> {
                 	if (game.isCellEmpty(r, c)) {
@@ -225,6 +225,7 @@ public class SOSGameGUI extends Application {
     	    char letter = game.getBoard()[cpuRow][cpuCol];
     	    board[cpuRow][cpuCol] = letter;
     	    ((Button) boardGrid.getChildren().get(cpuRow * size + cpuCol)).setText(String.valueOf(letter));
+    	    
     	    if(game.isGameOver()) {
     			System.out.println("CPU end game");
     			endGameDisplay(game.getWinner(), getBlueScore(), getRedScore());
@@ -269,9 +270,9 @@ public class SOSGameGUI extends Application {
 		line.setStrokeWidth(2);
 		// Set line color.
 		if (color == Player.BLUE) {
-			line.setStroke(Color.BLUE);
+			line.setStroke(Color.rgb(0, 0, 255, 0.5));
 		} else {
-			line.setStroke(Color.RED);
+			line.setStroke(Color.rgb(255, 0, 0, 0.5));
 		}
 		GridPane.setHalignment(line, HPos.CENTER);
 		boardGrid.add(line, col, row);

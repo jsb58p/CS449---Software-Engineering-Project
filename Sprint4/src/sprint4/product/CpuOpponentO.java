@@ -17,7 +17,7 @@ public class CpuOpponentO extends ComputerOpponent {
 	 * Chooses a board cell for computer opponent to place letter 'O'
 	 * 
 	 * @param boardSize the size of the board
-	 * @param player the player before the computer opponent's turn, 'BLUE' or 'RED'
+	 * @param player the computer opponent, 'BLUE' or 'RED'
 	 */
 	public int[] computerChooseStrategy(int boardSize, SOSGame.Player player){
 		System.out.println("O Choosing strategy");
@@ -43,7 +43,7 @@ public class CpuOpponentO extends ComputerOpponent {
 			if(options[i][2] > highestScore) {
 				highestScore = options[i][2];
 				highestIndex = i;
-			} else if(options[i][2] == highestScore && Math.random() < 0.05) {
+			} else if(options[i][2] == highestScore && Math.random() < 0.01 * Math.pow(10.0 / boardSize, Math.log(5) / Math.log(2))) {
 		        highestIndex = i;
 			}
 		}

@@ -243,7 +243,6 @@ public class SOSGame {
 					if(bounds.boundsCheck(Bound.SRIGHTBOUND, row, col, i)) {
 					    if(board[row - (2*i)][col + 2] == 'S' && board[row-i][col+1] == 'O') {
 					        sosCount++;
-					        System.out.println("SOS");
 							switch(i) {
 							case -1:
 								for(int j = 0; j < 3; j++) {
@@ -277,7 +276,6 @@ public class SOSGame {
 					if (bounds.boundsCheck(Bound.SLEFTBOUND, row, col, i) && board[row+i][col-1] == 'O') {
 						if(board[row + (2*i)][col - 2] == 'S' && board[row+i][col-1] == 'O') {
 					        sosCount++;
-					        System.out.println("SOS");
 					        switch(i) {
 							case -1:
 								for(int j = 0; j < 3; j++) {
@@ -312,7 +310,6 @@ public class SOSGame {
 				case 'O':
 					if(bounds.boundsCheck(Bound.OHORIZONTALBOUND, row, col, i))
 						if(board[row-i][col+1] == 'S' && board[row+i][col-1] == 'S') {
-						System.out.println("SOS");
 						sosCount++;
 						switch(i) {
 						case -1:
@@ -356,7 +353,6 @@ public class SOSGame {
 								gui.drawLine(row+i, col, getCurrentPlayer(), 2);
 							}
 						}	
-					System.out.println("SOS");
 					sosCount++;
 					}
 				}
@@ -367,7 +363,6 @@ public class SOSGame {
 								gui.drawLine(row-i, col, getCurrentPlayer(), 2);
 							}
 						}
-						System.out.println("SOS");
 						sosCount++;
 					}
 				}
@@ -381,7 +376,6 @@ public class SOSGame {
 							gui.drawLine(row-i, col, getCurrentPlayer(), 2);
 						}
 					}
-					System.out.println("SOS!");
 					sosCount++;
 				}
 				break;
@@ -411,16 +405,16 @@ public class SOSGame {
 	/**
 	 * Gets the blue player score.
 	 * 
-	 * @return
+	 * @return blue player score
 	 */
 	public int getBlueScore() {
 		return gameModeLogic.blueScore;
 	}
 	
 	/**
-	 * Gets the red player score
+	 * Gets the red player score.
 	 * 
-	 * @return
+	 * @return red player score
 	 */
 	public int getRedScore() {
 		return gameModeLogic.redScore;
