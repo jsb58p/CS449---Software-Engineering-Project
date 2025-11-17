@@ -27,10 +27,11 @@ public abstract class GameModeLogic{
 	 * @param player the player making the move
 	 */
 	public void handleMove(int row, int col, char letter, SOSGame.Player player) {
-		int sosFormed = game.checkScore(row, col, letter);
+		int sosFormed = game.checkScore(row, col, letter, true);
 		updateScore(player, sosFormed);
 		if(!shouldPlayerContinue(sosFormed)) {
 			game.switchPlayer();
+			System.out.println("Switching player...");
 		}
 	}
 	

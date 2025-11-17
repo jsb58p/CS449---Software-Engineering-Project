@@ -16,5 +16,13 @@ public abstract class ComputerOpponent {
 		this.game = game;
 	}
 	
+	/**
+	 * Computer opponent move decision logic.
+	 * 
+	 * @param boardSize size of the board
+	 * @param letter	
+	 * @param player
+	 */
+	public abstract int[] computerChooseStrategy(int boardSize, SOSGame.Player player); 
 	
 }

@@ -42,6 +42,7 @@ public class SOSGame {
 	private GameModeLogic gameModeLogic;
 	private BoundaryCheck bounds;
 	private SOSGameGUI gui;
+	private ComputerOpponent cpu = new CpuOpponentS(this);
 	
 	
 	/**
@@ -168,6 +169,60 @@ public class SOSGame {
 	}
 	
 	/**
+	 * Checks to see if the current player is controlled by the computer.
+	 * Then select the appropriate strategy based on the letter assigned to the computer opponent.
+	 */
+	public int[] cpuMoveCheck() {
+		switch(currentPlayer) {
+		case BLUE:
+			if(gui.getBluePlayerOpponent() == "Computer") {
+				switch(gui.getBluePlayerRadio()) {
+				case "S":
+					if(!(cpu instanceof CpuOpponentS)) {
+						cpu = new CpuOpponentS(this);
+						System.out.println("CPU Blue switch letter");
+					}
+					break;
+				case "O":
+					if(!(cpu instanceof CpuOpponentO)) {
+						cpu = new CpuOpponentO(this);
+						System.out.println("CPU Blue switch letter");
+					}
+					break;
+				default:
+					break;
+				}
+				return cpu.computerChooseStrategy(boardSize, currentPlayer);
+			}
+			break;
+		case RED:
+			if(gui.getRedPlayerOpponent() == "Computer") {
+				switch(gui.getRedPlayerRadio()) {
+				case "S":
+					if(!(cpu instanceof CpuOpponentS)) {
+						cpu = new CpuOpponentS(this);
+						System.out.println("CPU Red switch letter");
+					}
+					break;
+				case "O":
+					if(!(cpu instanceof CpuOpponentO)) {
+						cpu = new CpuOpponentO(this);
+						System.out.println("CPU Red switch letter");
+					}
+					break;
+				default: 
+					break;
+				}
+				return(cpu.computerChooseStrategy(boardSize, currentPlayer));
+			}
+			break;
+		default:
+			break;
+		}
+		return null;
+	}
+	
+	/**
 	 * Checks if the most recent move formed any "SOS" patterns and counts them.
 	 * It first checks the horizontal and diagonal for a given letter, then vertical.
 	 * Determines which cells to draw the line in.
@@ -175,33 +230,43 @@ public class SOSGame {
 	 * @param row the row index
 	 * @param col the column index
 	 * @param letter the letter placed ('S' or 'O')
+	 * @param drawLine determines if a line will be drawn if an 'SOS' is formed
 	 * @return the number of "SOS" patterns formed by this move
 	 */
-	public int checkScore(int row, int col, char letter) {
+	public int checkScore(int row, int col, char letter, boolean drawLine) {
 		int sosCount = 0;
 		if(gui != null) {
 			for(int i = -1; i <= 1; i++) {
 				// Horizontal and diagonal check for "SOS".
 				switch (letter) {
 				case 'S':
-					if(bounds.boundsCheck(Bound.SRIGHTBOUND, row, col, i) && board[row-i][col+1] == 'O') {
-					    if(board[row - (2*i)][col + 2] == 'S') {
+					if(bounds.boundsCheck(Bound.SRIGHTBOUND, row, col, i)) {
+					    if(board[row - (2*i)][col + 2] == 'S' && board[row-i][col+1] == 'O') {
 					        sosCount++;
 					        System.out.println("SOS");
 							switch(i) {
 							case -1:
 								for(int j = 0; j < 3; j++) {
-									gui.drawLine(row+j, col+j, getCurrentPlayer(), i);	
+									if(drawLine) {
+										System.out.println("Draw Line");
+										gui.drawLine(row+j, col+j, getCurrentPlayer(), i);	
+									}
 								}
 								break;
 							case 0:
 								for(int j = 0; j < 3; j++) {
-									gui.drawLine(row, col+j, getCurrentPlayer(), i);
+									if(drawLine) {
+										System.out.println("Draw Line");
+										gui.drawLine(row, col+j, getCurrentPlayer(), i);
+									}
 								}
 								break;
 							case 1:
 								for(int j = 0; j < 3; j++) {
-									gui.drawLine(row-j, col+j, getCurrentPlayer(), i);
+									if(drawLine) {
+										System.out.println("Draw Line");
+										gui.drawLine(row-j, col+j, getCurrentPlayer(), i);
+									}
 								}
 								break;
 							default:
@@ -210,23 +275,32 @@ public class SOSGame {
 					    }
 					}
 					if (bounds.boundsCheck(Bound.SLEFTBOUND, row, col, i) && board[row+i][col-1] == 'O') {
-						if(board[row + (2*i)][col - 2] == 'S') {
+						if(board[row + (2*i)][col - 2] == 'S' && board[row+i][col-1] == 'O') {
 					        sosCount++;
 					        System.out.println("SOS");
 					        switch(i) {
 							case -1:
 								for(int j = 0; j < 3; j++) {
-									gui.drawLine(row-j, col-j, getCurrentPlayer(), i);	
+									if(drawLine) {
+										System.out.println("Draw Line");
+										gui.drawLine(row-j, col-j, getCurrentPlayer(), i);	
+									}
 								}
 								break;
 							case 0:
 								for(int j = 0; j < 3; j++) {
-									gui.drawLine(row, col-j, getCurrentPlayer(), i);
+									if(drawLine) {
+										System.out.println("Draw Line");
+										gui.drawLine(row, col-j, getCurrentPlayer(), i);
+									}
 								}
 								break;
 							case 1:
 								for(int j = 0; j < 3; j++) {
-									gui.drawLine(row+j, col-j, getCurrentPlayer(), i);
+									if(drawLine) {
+										System.out.println("Draw Line");
+										gui.drawLine(row+j, col-j, getCurrentPlayer(), i);
+									}
 								}
 								break;
 							default:
@@ -236,23 +310,33 @@ public class SOSGame {
 					}
 					break;
 				case 'O':
-					if(bounds.boundsCheck(Bound.OHORIZONTALBOUND, row, col, i) && board[row-i][col+1] == 'S' && board[row+i][col-1] == 'S') {
+					if(bounds.boundsCheck(Bound.OHORIZONTALBOUND, row, col, i))
+						if(board[row-i][col+1] == 'S' && board[row+i][col-1] == 'S') {
 						System.out.println("SOS");
 						sosCount++;
 						switch(i) {
 						case -1:
 							for(int j = -1; j <= 1; j++) {
-								gui.drawLine(row-j, col-j, getCurrentPlayer(), i);	
+								if(drawLine) {
+									System.out.println("Draw Line");
+									gui.drawLine(row-j, col-j, getCurrentPlayer(), i);	
+								}
 							}
 							break;
 						case 0:
 							for(int j = -1; j <= 1; j++) {
-								gui.drawLine(row, col-j, getCurrentPlayer(), i);
+								if(drawLine) {
+									System.out.println("Draw Line");
+									gui.drawLine(row, col-j, getCurrentPlayer(), i);
+								}
 							}
 							break;
 						case 1:
 							for(int j = -1; j <= 1; j++) {
-								gui.drawLine(row+j, col-j, getCurrentPlayer(), i);
+								if(drawLine) {
+									System.out.println("Draw Line");
+									gui.drawLine(row+j, col-j, getCurrentPlayer(), i);
+								}
 							}
 							break;
 						default:
@@ -265,19 +349,23 @@ public class SOSGame {
 			// Vertical check for "SOS".
 			switch (letter) {
 			case 'S':
-				if(bounds.boundsCheck(Bound.SUPBOUND, row, col) && board[row+1][col] == 'O') { 
-					if(board[row+2][col] == 'S') { 
+				if(bounds.boundsCheck(Bound.SUPBOUND, row, col)) { 
+					if(board[row+2][col] == 'S' && board[row+1][col] == 'O') { 
 						for(int i = 0; i < 3; i++) {
-							gui.drawLine(row+i, col, getCurrentPlayer(), 2);
+							if(drawLine) {
+								gui.drawLine(row+i, col, getCurrentPlayer(), 2);
+							}
 						}	
 					System.out.println("SOS");
 					sosCount++;
 					}
 				}
-				if(bounds.boundsCheck(Bound.SDOWNBOUND, row, col) && board[row-1][col] == 'O') {
-					if(board[row-2][col] == 'S') {
+				if(bounds.boundsCheck(Bound.SDOWNBOUND, row, col)) {
+					if(board[row-2][col] == 'S' && board[row-1][col] == 'O') {
 						for(int i = 0; i < 3; i++) {
-							gui.drawLine(row-i, col, getCurrentPlayer(), 2);
+							if(drawLine) {
+								gui.drawLine(row-i, col, getCurrentPlayer(), 2);
+							}
 						}
 						System.out.println("SOS");
 						sosCount++;
@@ -285,11 +373,15 @@ public class SOSGame {
 				}
 				break;
 			case 'O':
-				if(bounds.boundsCheck(Bound.OVERTICALBOUND, row, col) && board[row+1][col] == 'S' && board[row-1][col] == 'S') {
+				if(bounds.boundsCheck(Bound.OVERTICALBOUND, row, col))
+					if(board[row+1][col] == 'S' && board[row-1][col] == 'S'){
 					for(int i = -1; i <= 1; i++) {
-						gui.drawLine(row-i, col, getCurrentPlayer(), 2);
+						if(drawLine) {
+							System.out.println("Ready to draw...");
+							gui.drawLine(row-i, col, getCurrentPlayer(), 2);
+						}
 					}
-					System.out.println("SOS");
+					System.out.println("SOS!");
 					sosCount++;
 				}
 				break;

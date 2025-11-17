@@ -198,6 +198,15 @@ public class SOSGameGUI extends Application {
                 			instructionLabel.setText("Current Turn: Red Player");
                 			instructionLabel.setTextFill(Color.RED);
                 		}
+                		// Computer move
+                		int[] move;
+                		while ((move = game.cpuMoveCheck()) != null) {
+                		    int cpuRow = move[0];
+                		    int cpuCol = move[1];
+                		    char letter = game.getBoard()[cpuRow][cpuCol];
+                		    board[cpuRow][cpuCol] = letter;
+                		    ((Button) boardGrid.getChildren().get(cpuRow * size + cpuCol)).setText(String.valueOf(letter));
+                		}
                 	}
                 });
                 boardGrid.add(cell, col, row);
@@ -276,6 +285,41 @@ public class SOSGameGUI extends Application {
     	redPoints.setText(String.valueOf(redScore));
     }
     
+    /**
+     * Get the selected blue player.
+     * 
+     * @return the currently selected blue player
+     */
+    public String getBluePlayerOpponent() {
+    	return bluePlayerOpponent.getSelectedButton();
+    }
+    
+    /**
+     * Get the selected red player.
+     * 
+     * @return the currently selected red player
+     */
+    public String getRedPlayerOpponent() {
+    	return redPlayerOpponent.getSelectedButton();
+    }
+    
+    /**
+     * Get the blue player letter
+     * 
+     * @return the current letter of the blue player.
+     */
+    public String getBluePlayerRadio() {
+    	return bluePlayerRadio.getSelectedButton();
+    }
+    
+    /**
+     * Get the red player letter
+     * 
+     * @return the current letter of the red player.
+     */
+    public String getRedPlayerRadio() {
+    	return redPlayerRadio.getSelectedButton();
+    }
     
     /**
      * Main entry point for the application.

@@ -80,6 +80,9 @@ public class TestSOSGame {
     assertEquals(SOSGame.Player.RED, generalGame.getCurrentPlayer(), "Player should switch to RED");
   }
   
+  /**
+   * Tests if a game is over in a simple game.
+   */
   @Test
   public void testSimpleGameIsOver() {
       char[][] board = simpleGame.getBoard();
@@ -91,6 +94,9 @@ public class TestSOSGame {
       assertTrue(simpleGame.isGameOver(), "Simple game should be over when board is full");
   }
 
+  /**
+   * Tests if a game is over in a general game.
+   */
   @Test
   public void testGeneralGameIsOver() {
       char[][] board = generalGame.getBoard();
