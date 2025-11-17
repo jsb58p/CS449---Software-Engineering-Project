@@ -33,7 +33,8 @@ public class SOSGameGUI extends Application {
 	private Label instructionLabel;
 	private Label bluePoints = new Label(" ");
 	private Label redPoints = new Label(" ");
-    
+    private String selectedMode;
+	
 	/**
 	 * Starts the JavaFX application and sets up the main window.
 	 *
@@ -72,7 +73,7 @@ public class SOSGameGUI extends Application {
         	bluePoints.setText(" ");
         	redPoints.setText(" ");
         	int size = boardSizeSpinner.getValue();
-        	String selectedMode = gameMode.getSelectedButton();
+        	selectedMode = gameMode.getSelectedButton();
         	SOSGame.GameMode mode = selectedMode.equals("Simple game") ? SOSGame.GameMode.SIMPLE : SOSGame.GameMode.GENERAL;
         	game = new SOSGame(size, mode, this);
         	updateBoardDisplay();
@@ -206,6 +207,10 @@ public class SOSGameGUI extends Application {
                 		    char letter = game.getBoard()[cpuRow][cpuCol];
                 		    board[cpuRow][cpuCol] = letter;
                 		    ((Button) boardGrid.getChildren().get(cpuRow * size + cpuCol)).setText(String.valueOf(letter));
+                		    int score = game.checkScore(cpuRow, cpuCol, letter, false);
+                		    if("Simple game".equals(selectedMode) && score > 0) {
+                				break;
+                			}
                 		}
                 	}
                 });
@@ -320,6 +325,7 @@ public class SOSGameGUI extends Application {
     public String getRedPlayerRadio() {
     	return redPlayerRadio.getSelectedButton();
     }
+    
     
     /**
      * Main entry point for the application.
