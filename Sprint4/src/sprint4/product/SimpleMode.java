@@ -45,14 +45,11 @@ public class SimpleMode extends GameModeLogic {
 	@Override
 	public SOSGame.Player getWinner() {
 		if (blueScore > 0) {
-			 System.out.println("Blue wins");
 			return SOSGame.Player.BLUE;
 		}
 		if (redScore > 0) {
-			 System.out.println("Red wins");
 			return SOSGame.Player.RED;
 		}
-		System.out.println("Draw");
 		return SOSGame.Player.NONE;
 	}
 	

@@ -8,7 +8,7 @@ import sprint4.product.SOSGame.Bound;
 */
 public class BoundaryCheck {
 	
-	int boardSize;
+	private int boardSize;
 	
 	/**
 	 * Creates a new boundary checker with the specified settings.

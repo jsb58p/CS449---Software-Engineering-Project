@@ -41,14 +41,11 @@ public class GeneralMode extends GameModeLogic {
 	@Override
 	public SOSGame.Player getWinner(){
 		if (blueScore > redScore) {
-			System.out.println("Blue wins");
 			return SOSGame.Player.BLUE;
 		}
 		if (redScore > blueScore) {
-			System.out.println("Red wins");
 			return SOSGame.Player.RED;
 		}
-		System.out.println("Draw");
 		return SOSGame.Player.NONE;
 	}
 	

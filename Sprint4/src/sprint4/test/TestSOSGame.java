@@ -1,11 +1,14 @@
 package sprint4.test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import sprint4.product.CpuOpponentO;
+import sprint4.product.CpuOpponentS;
 import sprint4.product.SOSGame;
 
 /**
@@ -108,5 +111,64 @@ public class TestSOSGame {
       
       assertTrue(generalGame.isGameOver(), "General game should be over when board is full");
   }
-
+  
+ /**
+  * Tests that CpuOpponentS places the letter 'S' when making a move.
+  */
+ @Test
+ public void testCpuOpponentSPlacesLetterS() {
+   CpuOpponentS cpuS = new CpuOpponentS(simpleGame);
+   
+   int[] move = cpuS.computerChooseStrategy(simpleGame.getBoardSize(), SOSGame.Player.BLUE);
+   
+   assertNotNull(move, "CPU should return a valid move");
+   assertEquals('S', simpleGame.getBoard()[move[0]][move[1]], "CPU should place 'S' at selected position");
+ }
+ 
+ /**
+  * Tests that CpuOpponentO places the letter 'O' when making a move.
+  */
+ @Test
+ public void testCpuOpponentOPlacesLetterO() {
+   CpuOpponentO cpuO = new CpuOpponentO(generalGame);
+   
+   int[] move = cpuO.computerChooseStrategy(generalGame.getBoardSize(), SOSGame.Player.RED);
+   
+   assertNotNull(move, "CPU should return a valid move");
+   assertEquals('O', generalGame.getBoard()[move[0]][move[1]], "CPU should place 'O' at selected position");
+ }
+  
+ /**
+  * Tests that CpuOpponentO selects the highest-scoring move.
+  */
+ @Test
+ public void testCpuOpponentOSelectsHighestScoringMove() {
+   simpleGame.getBoard()[0][0] = 'S';
+   simpleGame.getBoard()[0][2] = 'S';
+   
+   CpuOpponentO cpuO = new CpuOpponentO(simpleGame);
+   
+   int[] move = cpuO.computerChooseStrategy(simpleGame.getBoardSize(), SOSGame.Player.RED);
+   
+   assertEquals(0, move[0], "CPU should select row 0");
+   assertEquals(1, move[1], "CPU should select col 1 to complete SOS");
+   assertEquals('O', simpleGame.getBoard()[0][1], "Board should have 'O' at the scoring position");
+ }
+ 
+ /**
+  * Tests that CpuOpponentS selects the highest-scoring move.
+  */
+ @Test
+ public void testCpuOpponentSSelectsHighestScoringMove() {
+   generalGame.getBoard()[0][0] = 'S';
+   generalGame.getBoard()[1][0] = 'O';
+   
+   CpuOpponentS cpuS = new CpuOpponentS(generalGame);
+   
+   int[] move = cpuS.computerChooseStrategy(generalGame.getBoardSize(), SOSGame.Player.BLUE);
+   
+   assertEquals(2, move[0], "CPU should select row 2");
+   assertEquals(0, move[1], "CPU should select col 0 to complete SOS");
+   assertEquals('S', generalGame.getBoard()[2][0], "Board should have 'S' at the scoring position");
+ }
 }

@@ -79,7 +79,6 @@ public class SOSGameGUI extends Application {
         	SOSGame.GameMode mode = selectedMode.equals("Simple game") ? SOSGame.GameMode.SIMPLE : SOSGame.GameMode.GENERAL;
         	game = new SOSGame(size, mode, this);
         	updateBoardDisplay();
-        	System.out.println("New game started: " + size + "x" + size + ", " + mode);
         });
         
         topSection.getChildren().addAll(titleLabel, gameMode, sizeLabel, boardSizeSpinner, newGameButton);
@@ -200,7 +199,7 @@ public class SOSGameGUI extends Application {
                 			instructionLabel.setText("Current Turn: Red Player");
                 			instructionLabel.setTextFill(Color.RED);
                 		}
-                			computerMove();
+                		computerMove();
                 	}
                 });
                 boardGrid.add(cell, col, row);
@@ -225,9 +224,8 @@ public class SOSGameGUI extends Application {
     	    char letter = game.getBoard()[cpuRow][cpuCol];
     	    board[cpuRow][cpuCol] = letter;
     	    ((Button) boardGrid.getChildren().get(cpuRow * size + cpuCol)).setText(String.valueOf(letter));
-    	    
+      
     	    if(game.isGameOver()) {
-    			System.out.println("CPU end game");
     			endGameDisplay(game.getWinner(), getBlueScore(), getRedScore());
     			break;
     		}

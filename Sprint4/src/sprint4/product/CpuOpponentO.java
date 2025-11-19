@@ -20,7 +20,6 @@ public class CpuOpponentO extends ComputerOpponent {
 	 * @param player the computer opponent, 'BLUE' or 'RED'
 	 */
 	public int[] computerChooseStrategy(int boardSize, SOSGame.Player player){
-		System.out.println("O Choosing strategy");
 		int[][] options = new int[boardSize * boardSize][3];
 		
 		int highestIndex = -1;

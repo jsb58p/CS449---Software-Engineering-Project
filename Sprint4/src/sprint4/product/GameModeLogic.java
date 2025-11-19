@@ -31,7 +31,6 @@ public abstract class GameModeLogic{
 		updateScore(player, sosFormed);
 		if(!shouldPlayerContinue(sosFormed)) {
 			game.switchPlayer();
-			System.out.println("Switching player...");
 		}
 	}
 	
