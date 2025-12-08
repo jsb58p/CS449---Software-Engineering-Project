@@ -18,6 +18,8 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.stage.Stage;
 import sprint5.product.SOSGame.Player;
+import javafx.stage.FileChooser;
+import java.io.File;
 
 /**
  * This class represents the GUI for the SOS game.
@@ -69,18 +71,7 @@ public class SOSGameGUI extends Application {
         gameMode.setPadding(new Insets(30));
         
         Button newGameButton = new Button("New Game");
-        newGameButton.setOnAction(e -> {
-        	instructionLabel.setText("Current Turn: Blue Player");
-        	instructionLabel.setTextFill(Color.BLUE);
-        	boardGrid.setDisable(false);
-        	bluePoints.setText(" ");
-        	redPoints.setText(" ");
-        	int size = boardSizeSpinner.getValue();
-        	selectedMode = gameMode.getSelectedButton();
-        	SOSGame.GameMode mode = selectedMode.equals("Simple game") ? SOSGame.GameMode.SIMPLE : SOSGame.GameMode.GENERAL;
-        	game = new SOSGame(size, mode, this);
-        	updateBoardDisplay();
-        });
+        
         
         topSection.getChildren().addAll(titleLabel, gameMode, sizeLabel, boardSizeSpinner, newGameButton);
         root.setTop(topSection);
@@ -147,17 +138,41 @@ public class SOSGameGUI extends Application {
         
         instructionLabel = new Label("Current Turn:");
     	instructionLabel.setStyle("-fx-font-size: 15");
-        CheckBox checkbox1 = new CheckBox("Record Game");
+        CheckBox recordGame = new CheckBox("Record Game");
         
-        bottomSection.getChildren().addAll(instructionLabel, checkbox1);
+        bottomSection.getChildren().addAll(instructionLabel, recordGame);
         root.setBottom(bottomSection);
 
         // Create scene and show window.
+        newGameButton.setOnAction(e -> {
+        	instructionLabel.setText("Current Turn: Blue Player");
+        	instructionLabel.setTextFill(Color.BLUE);
+        	boardGrid.setDisable(false);
+        	bluePoints.setText(" ");
+        	redPoints.setText(" ");
+        	int size = boardSizeSpinner.getValue();
+        	selectedMode = gameMode.getSelectedButton();
+        	SOSGame.GameMode mode = selectedMode.equals("Simple game") ? SOSGame.GameMode.SIMPLE : SOSGame.GameMode.GENERAL;
+        	game = new SOSGame(size, mode, this);
+        	
+        	if(recordGame.isSelected()) {
+        		FileChooser fileChooser = new FileChooser();
+        		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+        		File file = fileChooser.showSaveDialog(null);
+        		if (file != null) {
+        			game.startRecording(file.getAbsolutePath());
+            		System.out.println(file);
+        		} 
+        	}
+        	updateBoardDisplay();
+        });
+        
         Scene scene = new Scene(root, 800, 600);
         primaryStage.setTitle("SOS Game");
         primaryStage.setScene(scene);                             
         primaryStage.show();
     }
+    
     
     /**
      * Updates the board display to match the current game state.

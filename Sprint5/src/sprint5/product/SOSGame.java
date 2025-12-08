@@ -1,5 +1,8 @@
 package sprint5.product;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 /**
 *Represents the SOS game logic.
 *Handles game size, rules, and player turns.
@@ -43,6 +46,7 @@ public class SOSGame {
 	private BoundaryCheck bounds;
 	private SOSGameGUI gui;
 	private ComputerOpponent cpu = new CpuOpponentS(this);
+	private FileWriter recordWriter = null;
 	
 	
 	/**
@@ -114,6 +118,24 @@ public class SOSGame {
 	 */
 	public void makeMove(int row, int col, char letter) {
 		board[row][col] = letter;
+		
+		if (recordWriter != null) {
+			try {
+				recordWriter.write(row + ", " + col + ", " + letter + ", " + currentPlayer + "\n");
+				recordWriter.flush();
+				System.out.println("Move Recorded");
+				if (gameModeLogic.isGameOver()) {
+					recordWriter.write("Winner: " + gameModeLogic.getWinner() + ", " + gameModeLogic.blueScore + ", " + gameModeLogic.redScore + "\n");
+					recordWriter.flush();
+					recordWriter.close();
+					recordWriter = null;
+				}
+			} catch (IOException e) {
+				System.out.println("Error Recording Game.");
+				e.printStackTrace();
+			}
+		}
+		
 		gameModeLogic.handleMove(row, col, letter, currentPlayer);
 		
 		if (gameModeLogic.isGameOver() && gui != null) {
@@ -317,6 +339,22 @@ public class SOSGame {
 				break;
 			}
 		return sosCount;
+	}
+	
+	/**
+	 * Initializes game recording.
+	 * 
+	 * @param filename name of the text file to record in
+	 */
+	public void startRecording(String filename) {
+		try {
+			recordWriter = new FileWriter(filename);
+			recordWriter.write(gameMode + ", " + boardSize + "\n");
+    		System.out.println(filename);
+		} catch (IOException e) {
+			System.out.println("Error Recording Game.");
+			e.printStackTrace();
+		}
 	}
 	
 	/**
