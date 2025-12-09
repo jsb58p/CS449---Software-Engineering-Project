@@ -119,13 +119,16 @@ public class SOSGame {
 	public void makeMove(int row, int col, char letter) {
 		board[row][col] = letter;
 		
+		gameModeLogic.handleMove(row, col, letter, currentPlayer);
+		
 		if (recordWriter != null) {
 			try {
-				recordWriter.write(row + ", " + col + ", " + letter + ", " + currentPlayer + "\n");
+				recordWriter.write(row + "," + col + "," + letter + "," + currentPlayer + "\n");
 				recordWriter.flush();
 				System.out.println("Move Recorded");
 				if (gameModeLogic.isGameOver()) {
-					recordWriter.write("Winner: " + gameModeLogic.getWinner() + ", " + gameModeLogic.blueScore + ", " + gameModeLogic.redScore + "\n");
+					recordWriter.write("WINNER:" + gameModeLogic.getWinner() + "," + gameModeLogic.blueScore + "," + gameModeLogic.redScore + "\n");
+					System.out.println("Winner found");
 					recordWriter.flush();
 					recordWriter.close();
 					recordWriter = null;
@@ -135,8 +138,6 @@ public class SOSGame {
 				e.printStackTrace();
 			}
 		}
-		
-		gameModeLogic.handleMove(row, col, letter, currentPlayer);
 		
 		if (gameModeLogic.isGameOver() && gui != null) {
 			gui.endGameDisplay(gameModeLogic.getWinner(), gameModeLogic.blueScore, gameModeLogic.redScore);
@@ -349,7 +350,7 @@ public class SOSGame {
 	public void startRecording(String filename) {
 		try {
 			recordWriter = new FileWriter(filename);
-			recordWriter.write(gameMode + ", " + boardSize + "\n");
+			recordWriter.write(gameMode + "," + boardSize + "\n");
     		System.out.println(filename);
 		} catch (IOException e) {
 			System.out.println("Error Recording Game.");
@@ -439,4 +440,5 @@ public class SOSGame {
 	public Player getCurrentPlayer() {
 		return currentPlayer;
 	}
+	
 }

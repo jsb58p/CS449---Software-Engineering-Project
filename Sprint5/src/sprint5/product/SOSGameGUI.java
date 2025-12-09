@@ -1,5 +1,7 @@
 package sprint5.product;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -17,9 +19,12 @@ import javafx.scene.shape.Line;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import sprint5.product.SOSGame.Player;
 import javafx.stage.FileChooser;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 
 /**
  * This class represents the GUI for the SOS game.
@@ -37,6 +42,7 @@ public class SOSGameGUI extends Application {
 	private Label bluePoints = new Label(" ");
 	private Label redPoints = new Label(" ");
     private String selectedMode;
+    private boolean replay = false;
 	
 	/**
 	 * Starts the JavaFX application and sets up the main window.
@@ -140,7 +146,53 @@ public class SOSGameGUI extends Application {
     	instructionLabel.setStyle("-fx-font-size: 15");
         CheckBox recordGame = new CheckBox("Record Game");
         
-        bottomSection.getChildren().addAll(instructionLabel, recordGame);
+        Button replayGame = new Button("Replay");
+        replayGame.setOnAction(e -> {
+        	FileChooser fileChooser = new FileChooser();
+        	fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+        	File file = fileChooser.showOpenDialog(null);
+        	
+        	if (file == null) {
+        		return;
+        	}
+        	
+        	try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+				String[] textEntry = bufferedReader.readLine().split(",");
+				game = new SOSGame(Integer.parseInt(textEntry[1]), textEntry[0].equals("SIMPLE") ? SOSGame.GameMode.SIMPLE : SOSGame.GameMode.GENERAL, this);
+				replay = true;
+				updateBoardDisplay();
+				boardGrid.setDisable(true);
+				
+				Timeline timeline = new Timeline();
+				String line;
+				int i = 0;
+				while ((line = bufferedReader.readLine()) != null && !line.startsWith("WINNER:")) {
+					final String[] moveEntry = line.split(",");
+					final int gameSize = game.getBoardSize();
+					final int row = Integer.parseInt(moveEntry[0]); 
+					final int col = Integer.parseInt(moveEntry[1]);
+					final String letter = moveEntry[2];
+					timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(i), event -> {
+						game.makeMove(row,  col,  letter.charAt(0));
+						((Button) boardGrid.getChildren().get(row * gameSize + col)).setText(letter);
+						
+						if(!game.isGameOver()) {
+							String player = moveEntry[3].trim();
+							instructionLabel.setText("Current Turn: " + player + " Player");
+							instructionLabel.setTextFill(player.equals("BLUE") ? Color.BLUE : Color.RED);
+						}
+					}));
+					i++;
+				}
+				timeline.play();
+				replay = false;
+			} catch (Exception ex) {
+				System.out.println("Error Replaying Game.");
+				ex.printStackTrace();
+			}
+        });
+        
+        bottomSection.getChildren().addAll(instructionLabel, recordGame, replayGame);
         root.setBottom(bottomSection);
 
         // Create scene and show window.
@@ -215,14 +267,16 @@ public class SOSGameGUI extends Application {
                 			instructionLabel.setText("Current Turn: Red Player");
                 			instructionLabel.setTextFill(Color.RED);
                 		}
-                		computerMove();
+                		if (!replay) {
+                			computerMove();
+                		}
                 	}
                 });
                 boardGrid.add(cell, col, row);
             }
         }
         
-    	if ("Computer".equals(bluePlayerOpponent.getSelectedButton())) {
+    	if (!replay && "Computer".equals(bluePlayerOpponent.getSelectedButton())) {
     		computerMove();
     	}
     }
