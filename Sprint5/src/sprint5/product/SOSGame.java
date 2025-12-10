@@ -127,7 +127,7 @@ public class SOSGame {
 				recordWriter.flush();
 				System.out.println("Move Recorded");
 				if (gameModeLogic.isGameOver()) {
-					recordWriter.write("WINNER:" + gameModeLogic.getWinner() + "," + gameModeLogic.blueScore + "," + gameModeLogic.redScore + "\n");
+					recordWriter.write("WINNER:" + gameModeLogic.getWinner() + "," + gameModeLogic.getBlueScore() + "," + gameModeLogic.getRedScore() + "\n");
 					System.out.println("Winner found");
 					recordWriter.flush();
 					recordWriter.close();
@@ -140,7 +140,7 @@ public class SOSGame {
 		}
 		
 		if (gameModeLogic.isGameOver() && gui != null) {
-			gui.endGameDisplay(gameModeLogic.getWinner(), gameModeLogic.blueScore, gameModeLogic.redScore);
+			gui.endGameDisplay(gameModeLogic.getWinner(), gameModeLogic.getBlueScore(), gameModeLogic.getRedScore());
 		}
 	}
 	

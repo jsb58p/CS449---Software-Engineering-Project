@@ -156,6 +156,9 @@ public class SOSGameGUI extends Application {
         		return;
         	}
         	
+        	bluePoints.setText(" ");
+        	redPoints.setText(" ");
+        	
         	try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
 				String[] textEntry = bufferedReader.readLine().split(",");
 				game = new SOSGame(Integer.parseInt(textEntry[1]), textEntry[0].equals("SIMPLE") ? SOSGame.GameMode.SIMPLE : SOSGame.GameMode.GENERAL, this);
@@ -175,7 +178,8 @@ public class SOSGameGUI extends Application {
 					timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(i), event -> {
 						game.makeMove(row,  col,  letter.charAt(0));
 						((Button) boardGrid.getChildren().get(row * gameSize + col)).setText(letter);
-						
+			        	bluePoints.setText(String.valueOf(getBlueScore()));
+						redPoints.setText(String.valueOf(getRedScore()));
 						if(!game.isGameOver()) {
 							String player = moveEntry[3].trim();
 							instructionLabel.setText("Current Turn: " + player + " Player");
@@ -213,7 +217,6 @@ public class SOSGameGUI extends Application {
         		File file = fileChooser.showSaveDialog(null);
         		if (file != null) {
         			game.startRecording(file.getAbsolutePath());
-            		System.out.println(file);
         		} 
         	}
         	updateBoardDisplay();
