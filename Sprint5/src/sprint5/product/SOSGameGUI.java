@@ -147,54 +147,7 @@ public class SOSGameGUI extends Application {
         CheckBox recordGame = new CheckBox("Record Game");
         
         Button replayGame = new Button("Replay");
-        replayGame.setOnAction(e -> {
-        	FileChooser fileChooser = new FileChooser();
-        	fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-        	File file = fileChooser.showOpenDialog(null);
-        	
-        	if (file == null) {
-        		return;
-        	}
-        	
-        	bluePoints.setText(" ");
-        	redPoints.setText(" ");
-        	
-        	try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
-				String[] textEntry = bufferedReader.readLine().split(",");
-				game = new SOSGame(Integer.parseInt(textEntry[1]), textEntry[0].equals("SIMPLE") ? SOSGame.GameMode.SIMPLE : SOSGame.GameMode.GENERAL, this);
-				replay = true;
-				updateBoardDisplay();
-				boardGrid.setDisable(true);
-				
-				Timeline timeline = new Timeline();
-				String line;
-				int i = 0;
-				while ((line = bufferedReader.readLine()) != null && !line.startsWith("WINNER:")) {
-					final String[] moveEntry = line.split(",");
-					final int gameSize = game.getBoardSize();
-					final int row = Integer.parseInt(moveEntry[0]); 
-					final int col = Integer.parseInt(moveEntry[1]);
-					final String letter = moveEntry[2];
-					timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(i), event -> {
-						game.makeMove(row,  col,  letter.charAt(0));
-						((Button) boardGrid.getChildren().get(row * gameSize + col)).setText(letter);
-			        	bluePoints.setText(String.valueOf(getBlueScore()));
-						redPoints.setText(String.valueOf(getRedScore()));
-						if(!game.isGameOver()) {
-							String player = moveEntry[3].trim();
-							instructionLabel.setText("Current Turn: " + player + " Player");
-							instructionLabel.setTextFill(player.equals("BLUE") ? Color.BLUE : Color.RED);
-						}
-					}));
-					i++;
-				}
-				timeline.play();
-				replay = false;
-			} catch (Exception ex) {
-				System.out.println("Error Replaying Game.");
-				ex.printStackTrace();
-			}
-        });
+        gameReplay(replayGame);
         
         bottomSection.getChildren().addAll(instructionLabel, recordGame, replayGame);
         root.setBottom(bottomSection);
@@ -282,6 +235,62 @@ public class SOSGameGUI extends Application {
     	if (!replay && "Computer".equals(bluePlayerOpponent.getSelectedButton())) {
     		computerMove();
     	}
+    }
+    
+    /**
+     * Replays a game from a valid file containing a recording.
+     * 
+     * @param replayGame the Replay button on the GUI
+     */
+    private void gameReplay(Button replayGame) {
+    	replayGame.setOnAction(e -> {
+        	FileChooser fileChooser = new FileChooser();
+        	fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+        	File file = fileChooser.showOpenDialog(null);
+        	
+        	if (file == null) {
+        		return;
+        	}
+        	
+        	bluePoints.setText(" ");
+        	redPoints.setText(" ");
+        	
+        	try (BufferedReader bufferedReader = new BufferedReader(new FileReader(file))) {
+				String[] textEntry = bufferedReader.readLine().split(",");
+				game = new SOSGame(Integer.parseInt(textEntry[1]), textEntry[0].equals("SIMPLE") ? SOSGame.GameMode.SIMPLE : SOSGame.GameMode.GENERAL, this);
+				replay = true;
+				updateBoardDisplay();
+				boardGrid.setDisable(true);
+				
+				Timeline timeline = new Timeline();
+				String line;
+				int i = 0;
+				while ((line = bufferedReader.readLine()) != null && !line.startsWith("WINNER:")) {
+					final String[] moveEntry = line.split(",");
+					final int gameSize = game.getBoardSize();
+					final int row = Integer.parseInt(moveEntry[0]); 
+					final int col = Integer.parseInt(moveEntry[1]);
+					final String letter = moveEntry[2];
+					timeline.getKeyFrames().add(new KeyFrame(Duration.seconds(i), event -> {
+						game.makeMove(row,  col,  letter.charAt(0));
+						((Button) boardGrid.getChildren().get(row * gameSize + col)).setText(letter);
+			        	bluePoints.setText(String.valueOf(getBlueScore()));
+						redPoints.setText(String.valueOf(getRedScore()));
+						if(!game.isGameOver()) {
+							String player = moveEntry[3].trim();
+							instructionLabel.setText("Current Turn: " + player + " Player");
+							instructionLabel.setTextFill(player.equals("BLUE") ? Color.BLUE : Color.RED);
+						}
+					}));
+					i++;
+				}
+				timeline.play();
+				replay = false;
+			} catch (Exception ex) {
+				System.out.println("Error Replaying Game.");
+				ex.printStackTrace();
+			}
+        });
     }
     
     /**
