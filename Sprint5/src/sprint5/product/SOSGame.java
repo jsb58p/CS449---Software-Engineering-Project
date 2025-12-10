@@ -125,10 +125,8 @@ public class SOSGame {
 			try {
 				recordWriter.write(row + "," + col + "," + letter + "," + currentPlayer + "\n");
 				recordWriter.flush();
-				System.out.println("Move Recorded");
 				if (gameModeLogic.isGameOver()) {
 					recordWriter.write("WINNER:" + gameModeLogic.getWinner() + "," + gameModeLogic.getBlueScore() + "," + gameModeLogic.getRedScore() + "\n");
-					System.out.println("Winner found");
 					recordWriter.flush();
 					recordWriter.close();
 					recordWriter = null;
@@ -351,7 +349,6 @@ public class SOSGame {
 		try {
 			recordWriter = new FileWriter(filename);
 			recordWriter.write(gameMode + "," + boardSize + "\n");
-    		System.out.println(filename);
 		} catch (IOException e) {
 			System.out.println("Error Recording Game.");
 			e.printStackTrace();
