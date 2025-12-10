@@ -110,17 +110,13 @@ public class SOSGame {
 	}
 	
 	/**
-	 * Places a letter at the specified position and applies game logic.
+	 * Records game moves to file.
 	 * 
 	 * @param row the row index
 	 * @param col the column index
 	 * @param letter the letter to place ('S' or 'O')
 	 */
-	public void makeMove(int row, int col, char letter) {
-		board[row][col] = letter;
-		
-		gameModeLogic.handleMove(row, col, letter, currentPlayer);
-		
+	private void recordMove(int row, int col, char letter) {
 		if (recordWriter != null) {
 			try {
 				recordWriter.write(row + "," + col + "," + letter + "," + currentPlayer + "\n");
@@ -136,6 +132,21 @@ public class SOSGame {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	/**
+	 * Places a letter at the specified position and applies game logic.
+	 * 
+	 * @param row the row index
+	 * @param col the column index
+	 * @param letter the letter to place ('S' or 'O')
+	 */
+	public void makeMove(int row, int col, char letter) {
+		board[row][col] = letter;
+		
+		gameModeLogic.handleMove(row, col, letter, currentPlayer);
+		
+		recordMove(row, col, letter);
 		
 		if (gameModeLogic.isGameOver() && gui != null) {
 			gui.endGameDisplay(gameModeLogic.getWinner(), gameModeLogic.getBlueScore(), gameModeLogic.getRedScore());
